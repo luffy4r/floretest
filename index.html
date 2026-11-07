@@ -1,1 +1,1806 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nouré — Soins naturels pour la peau & les cheveux</title>
+<meta name="description" content="Nouré, cosmétiques naturels testés dermatologiquement. Soins visage, cheveux et corps, formulés en Algérie. Livraison offerte dès 10 000 DA.">
+<meta name="theme-color" content="#2f3627">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%232f3627'/%3E%3Ctext x='50' y='67' font-family='Georgia,serif' font-size='46' fill='%23f7f3ec' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Nouré — design tokens
+   ============================================================ */
+:root{
+  --cream:#f7f3ec;
+  --cream-2:#efe9df;
+  --paper:#fbf9f5;
+  --ink:#252a20;
+  --forest:#2f3627;
+  --forest-2:#3a4231;
+  --moss:#6e7d59;
+  --sage:#9aa985;
+  --gold:#b39a6a;
+  --muted:#747a6c;
+  --line:rgba(37,42,32,.13);
+  --line-soft:rgba(37,42,32,.08);
+  --green-star:#3f7a4a;
+  --radius:18px;
+  --radius-lg:26px;
+  --shadow:0 26px 60px -30px rgba(37,42,32,.35);
+  --font-display:"Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-body:"Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --header-h:82px;
+}
 
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:15px;
+  line-height:1.6;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+body.no-scroll{overflow:hidden}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input{font:inherit}
+h1,h2,h3,h4,p,figure{margin:0}
+ul{margin:0;padding:0;list-style:none}
+::selection{background:var(--forest);color:var(--cream)}
+:focus-visible{outline:2px solid var(--moss);outline-offset:3px;border-radius:4px}
+.skip-link{position:fixed;left:16px;top:-80px;z-index:300;background:var(--forest);color:var(--cream);padding:12px 18px;border-radius:8px;transition:top .2s}
+.skip-link:focus{top:16px}
+.wrap{width:min(1280px,100% - 48px);margin-inline:auto}
+[id]{scroll-margin-top:calc(var(--header-h) + 18px)}
+.serif{font-family:var(--font-display);font-weight:500;letter-spacing:.01em}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:10.5px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--moss);
+}
+.eyebrow::before{content:"";width:26px;height:1px;background:currentColor;opacity:.7}
+.eyebrow.center::after{content:"";width:26px;height:1px;background:currentColor;opacity:.7}
+
+/* ============================================================
+   Announcement marquee
+   ============================================================ */
+.announce{
+  background:var(--forest);color:var(--cream);
+  font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  overflow:hidden;position:relative;z-index:60;
+}
+.marquee{display:flex;overflow:hidden;padding:10px 0}
+.marquee-track{display:flex;flex:0 0 auto;align-items:center;gap:0;animation:marquee 34s linear infinite;will-change:transform}
+.marquee:hover .marquee-track{animation-play-state:paused}
+.marquee-track span{padding:0 26px;white-space:nowrap;display:inline-flex;align-items:center;gap:26px}
+.marquee-track span::after{content:"✦";font-size:8px;opacity:.55}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ============================================================
+   Header
+   ============================================================ */
+.site-header{
+  position:sticky;top:0;z-index:70;
+  background:var(--cream);
+  border-bottom:1px solid transparent;
+  transition:box-shadow .3s var(--ease),border-color .3s;
+}
+.site-header.scrolled{box-shadow:0 12px 30px -22px rgba(37,42,32,.5);border-color:var(--line-soft)}
+.header-inner{
+  height:var(--header-h);
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;
+  transition:height .3s var(--ease);
+}
+.site-header.scrolled .header-inner{height:68px}
+.header-left{display:flex;align-items:center;gap:26px}
+.header-nav{display:flex;gap:26px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.header-nav a{position:relative;padding:6px 0;color:var(--ink)}
+.header-nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--forest);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+.header-nav a:hover::after{transform:scaleX(1)}
+.header-right{display:flex;align-items:center;justify-content:flex-end;gap:6px}
+.icon-btn{
+  width:42px;height:42px;display:grid;place-items:center;border-radius:50%;
+  transition:background .25s,transform .25s;position:relative;color:var(--ink);
+}
+.icon-btn:hover{background:rgba(37,42,32,.06)}
+.icon-btn svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.cart-btn .count{
+  position:absolute;top:3px;right:2px;min-width:17px;height:17px;padding:0 4px;
+  background:var(--forest);color:var(--cream);border-radius:20px;
+  font-size:9.5px;font-weight:700;display:grid;place-items:center;line-height:1;
+  transition:transform .3s var(--ease);
+}
+.cart-btn .count.hide{display:none}
+.cart-btn.bump .count{transform:scale(1.25)}
+.logo{display:flex;flex-direction:column;align-items:center;line-height:1;gap:5px;color:var(--forest);white-space:nowrap}
+.logo-mark{width:26px;height:26px;margin-bottom:-1px}
+.logo-word{font-family:var(--font-display);font-size:34px;font-weight:600;letter-spacing:.045em}
+.logo-sub{font-size:8px;font-weight:700;letter-spacing:.46em;text-transform:uppercase;color:var(--moss);transform:translateX(.23em)}
+.hamburger{display:none}
+.hamburger span{display:block;width:20px;height:1.6px;background:var(--ink);transition:transform .3s,opacity .3s}
+.hamburger span+span{margin-top:5px}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn{
+  --btn-bg:var(--forest);--btn-fg:var(--cream);--btn-bd:var(--forest);
+  display:inline-flex;align-items:center;justify-content:center;gap:11px;
+  background:var(--btn-bg);color:var(--btn-fg);border:1px solid var(--btn-bd);
+  padding:15px 26px;border-radius:100px;
+  font-size:12px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+  transition:transform .3s var(--ease),background .3s,color .3s,border-color .3s,box-shadow .3s;
+  cursor:pointer;
+}
+.btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;transition:transform .3s var(--ease)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 14px 30px -16px rgba(37,42,32,.6)}
+.btn:hover svg{transform:translateX(3px)}
+.btn-light{--btn-bg:var(--cream);--btn-fg:var(--forest);--btn-bd:var(--cream)}
+.btn-ghost{--btn-bg:transparent;--btn-fg:var(--cream);--btn-bd:rgba(247,243,236,.4)}
+.btn-ghost:hover{--btn-bg:rgba(247,243,236,.1);--btn-bd:var(--cream)}
+.btn-outline{--btn-bg:transparent;--btn-fg:var(--forest);--btn-bd:rgba(37,42,32,.28)}
+.btn-outline:hover{--btn-bg:var(--forest);--btn-fg:var(--cream);--btn-bd:var(--forest)}
+.btn-block{width:100%}
+.link-arrow{
+  display:inline-flex;align-items:center;gap:9px;font-size:11.5px;font-weight:700;
+  letter-spacing:.13em;text-transform:uppercase;border-bottom:1px solid currentColor;padding-bottom:4px;
+}
+.link-arrow svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.7;transition:transform .3s var(--ease)}
+.link-arrow:hover svg{transform:translate(3px,-3px)}
+
+/* ============================================================
+   Hero
+   ============================================================ */
+.hero{position:relative;background:var(--forest);overflow:hidden}
+.hero-inner{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);min-height:clamp(560px,78vh,780px)}
+.hero-copy{
+  position:relative;z-index:3;color:var(--cream);
+  padding:clamp(48px,7vw,96px) clamp(28px,5vw,84px) clamp(48px,6vw,80px);
+  display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
+  overflow:hidden;
+}
+.hero-copy::before{
+  content:"";position:absolute;inset:-30% 30% 40% -30%;
+  background:radial-gradient(circle,rgba(154,169,133,.18),transparent 62%);
+  pointer-events:none;
+}
+.hero-copy .eyebrow{color:var(--sage);margin-bottom:26px}
+.hero-slides{position:relative;width:100%}
+.hero-slide{display:none}
+.hero-slide.active{display:block;animation:heroIn .8s var(--ease) both}
+@keyframes heroIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.hero h1{
+  font-family:var(--font-display);font-weight:500;
+  font-size:clamp(44px,4.7vw,74px);line-height:1.02;letter-spacing:-.015em;
+  margin-bottom:24px;
+}
+.hero h1 em{font-style:italic;color:var(--sage)}
+.hero p{max-width:430px;color:rgba(247,243,236,.76);font-size:15px;line-height:1.75;font-weight:300}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+.hero-proof{display:flex;align-items:center;gap:16px;margin-top:38px;font-size:11.5px;color:rgba(247,243,236,.72);letter-spacing:.06em}
+.stars{display:inline-flex;gap:2px;color:var(--green-star);font-size:13px;letter-spacing:.02em}
+.hero-proof .stars{color:#d9b97e;font-size:13px}
+.hero-proof strong{color:var(--cream)}
+.hero-proof .sep{width:1px;height:20px;background:rgba(247,243,236,.22)}
+.hero-media{position:relative;overflow:hidden;background:#3b4233}
+.hero-media::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(47,54,39,.34),transparent 26%),linear-gradient(0deg,rgba(47,54,39,.2),transparent 35%);
+  pointer-events:none;
+}
+.hero-img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transform:scale(1.06);transition:opacity 1.1s var(--ease),transform 7s linear;
+}
+.hero-img.active{opacity:1;transform:scale(1)}
+.hero-dots{
+  position:absolute;left:clamp(28px,5vw,84px);bottom:clamp(26px,4vw,44px);z-index:4;
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border-radius:100px;background:rgba(27,31,23,.22);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.hero-dots button{
+  width:26px;height:3px;border-radius:3px;background:rgba(247,243,236,.3);
+  transition:background .3s,width .3s;
+}
+.hero-dots button.active{width:44px;background:var(--cream)}
+.hero-count{
+  position:absolute;right:clamp(24px,3vw,40px);bottom:clamp(22px,3vw,36px);z-index:4;
+  font-family:var(--font-display);font-size:15px;letter-spacing:.16em;color:rgba(247,243,236,.75);
+}
+.hero-count b{color:var(--cream);font-weight:500}
+
+/* ============================================================
+   Category rail
+   ============================================================ */
+.cat-rail{border-bottom:1px solid var(--line);background:var(--paper)}
+.cat-rail ul{display:grid;grid-template-columns:repeat(4,1fr)}
+.cat-rail li+li{border-left:1px solid var(--line-soft)}
+.cat-rail a{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:22px 26px;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  transition:background .25s,color .25s;
+}
+.cat-rail a span{display:flex;align-items:baseline;gap:8px}
+.cat-rail a small{font-size:9px;font-weight:600;color:var(--muted);letter-spacing:.06em}
+.cat-rail a svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.4;transition:transform .3s var(--ease)}
+.cat-rail a:hover{background:var(--cream-2)}
+.cat-rail a:hover svg{transform:translate(2px,-2px)}
+
+/* ============================================================
+   Sections & product grids
+   ============================================================ */
+.section{padding:clamp(58px,7vw,100px) 0}
+.section--paper{background:var(--paper)}
+.section-head{text-align:center;max-width:660px;margin:0 auto clamp(34px,4vw,54px)}
+.section-head .eyebrow{margin-bottom:16px}
+.section-head h2{
+  font-family:var(--font-display);font-weight:500;
+  font-size:clamp(34px,4vw,52px);line-height:1.06;letter-spacing:-.01em;margin-bottom:14px;
+}
+.section-head p{color:var(--muted);font-size:14px;line-height:1.7}
+.section-foot{display:flex;justify-content:center;margin-top:42px}
+.grid{display:grid;gap:clamp(14px,2vw,26px)}
+.grid--3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid--4{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+.product{position:relative;min-width:0}
+.product-media{
+  position:relative;overflow:hidden;border-radius:var(--radius);
+  background:radial-gradient(circle at 50% 34%,#fffdf8 0%,var(--pbg,#eef0e7) 74%);
+  aspect-ratio:1/1.08;display:grid;place-items:center;
+  isolation:isolate;
+  transition:box-shadow .35s var(--ease);
+}
+.product-media::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;
+  border:1px solid rgba(37,42,32,.05);pointer-events:none;
+}
+.product:hover .product-media{box-shadow:0 30px 46px -34px rgba(37,42,32,.45)}
+.art{
+  width:74%;height:auto;max-height:86%;
+  filter:drop-shadow(0 22px 24px rgba(47,54,39,.16));
+  transition:transform .5s var(--ease);
+}
+.product:hover .art,.mini-art:hover{transform:translateY(-6px) scale(1.03)}
+.product-badge{
+  position:absolute;top:14px;left:14px;z-index:3;
+  background:var(--forest);color:var(--cream);
+  font-size:8.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  padding:6px 11px;border-radius:50px;
+}
+.product-badge--gold{background:var(--gold);color:#fff}
+.product-badge--sale{background:#9c4f3f;color:#fff}
+.wish{
+  position:absolute;top:10px;right:10px;z-index:3;width:36px;height:36px;border-radius:50%;
+  display:grid;place-items:center;background:rgba(251,249,245,.86);backdrop-filter:blur(6px);
+  transition:background .25s,transform .25s;
+}
+.wish svg{width:16px;height:16px;stroke:var(--ink);fill:none;stroke-width:1.5;transition:fill .25s,stroke .25s}
+.wish:hover{transform:scale(1.08)}
+.wish.active svg{fill:#9c4f3f;stroke:#9c4f3f}
+.quick-add{
+  position:absolute;left:12px;right:12px;bottom:12px;z-index:3;
+  background:rgba(47,54,39,.95);color:var(--cream);border-radius:100px;
+  padding:13px 16px;font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  opacity:0;transform:translateY(12px);
+  transition:opacity .3s var(--ease),transform .3s var(--ease),background .25s;
+}
+.quick-add svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.7}
+.product:hover .quick-add,.quick-add:focus-visible{opacity:1;transform:none}
+.quick-add:hover{background:var(--forest-2)}
+.product-info{padding:16px 4px 0}
+.product-cat{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--moss)}
+.product-name{font-size:15px;font-weight:600;line-height:1.35;margin:6px 0 8px;letter-spacing:-.005em}
+.product-name a:hover{text-decoration:underline;text-underline-offset:3px}
+.product-meta{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.price{font-size:14px;font-weight:800;letter-spacing:.01em;white-space:nowrap}
+.price small{font-size:10px;font-weight:600;color:var(--muted);margin-left:5px;letter-spacing:.06em}
+.rating-mini{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--muted);white-space:nowrap}
+.rating-mini .stars{font-size:10px}
+.flash{animation:flash 1.1s var(--ease)}
+@keyframes flash{0%,100%{box-shadow:0 0 0 0 rgba(110,125,89,0)}25%{box-shadow:0 0 0 4px rgba(110,125,89,.45)}}
+
+/* ============================================================
+   Univers cards
+   ============================================================ */
+.univers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,1.6vw,20px)}
+.univers-card{position:relative;border-radius:var(--radius);overflow:hidden;aspect-ratio:4/5;background:var(--cream-2)}
+.univers-card img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+.univers-card:hover img{transform:scale(1.055)}
+.univers-card::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(27,31,23,.62),rgba(27,31,23,0) 52%)}
+.univers-label{position:absolute;left:24px;right:24px;bottom:22px;z-index:2;color:var(--cream);display:flex;align-items:flex-end;justify-content:space-between;gap:14px}
+.univers-label small{display:block;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:rgba(247,243,236,.75);margin-bottom:5px}
+.univers-label h3{font-family:var(--font-display);font-size:clamp(24px,2.2vw,32px);font-weight:500;line-height:1}
+.univers-label .arrow{width:40px;height:40px;border-radius:50%;border:1px solid rgba(247,243,236,.45);display:grid;place-items:center;flex:0 0 auto;transition:background .3s,color .3s}
+.univers-label .arrow svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.5;transition:transform .3s var(--ease)}
+.univers-card:hover .arrow{background:var(--cream);color:var(--forest)}
+.univers-card:hover .arrow svg{transform:translate(2px,-2px)}
+
+/* ============================================================
+   Feature banner (Perfect Hair)
+   ============================================================ */
+.feature{position:relative;background:var(--forest);color:var(--cream);overflow:hidden;border-radius:var(--radius-lg);isolation:isolate}
+.feature-inner{display:grid;grid-template-columns:1.02fr 1fr;min-height:520px}
+.feature-copy{padding:clamp(36px,5vw,72px);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;position:relative;z-index:2}
+.feature-copy .eyebrow{color:var(--sage);margin-bottom:20px}
+.feature-copy h2{font-family:var(--font-display);font-size:clamp(40px,4.6vw,66px);font-weight:500;line-height:.98;letter-spacing:-.015em;margin-bottom:20px}
+.feature-copy h2 em{font-style:italic;color:var(--sage)}
+.feature-copy p{max-width:420px;font-size:14px;line-height:1.8;color:rgba(247,243,236,.74);font-weight:300}
+.feature-list{display:grid;gap:10px;margin:26px 0 30px;font-size:12.5px;color:rgba(247,243,236,.86)}
+.feature-list li{display:flex;align-items:center;gap:10px}
+.feature-list svg{width:16px;height:16px;flex:0 0 auto;stroke:var(--sage);fill:none;stroke-width:1.6}
+.feature-media{position:relative;overflow:hidden;min-height:340px}
+.feature-media img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transition:transform 1.2s var(--ease)}
+.feature:hover .feature-media img{transform:scale(1.04)}
+.feature-media::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--forest),transparent 32%)}
+.feature-tag{
+  position:absolute;right:22px;bottom:22px;z-index:2;background:rgba(247,243,236,.92);color:var(--forest);
+  padding:12px 18px;border-radius:100px;font-size:9.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+  backdrop-filter:blur(6px);
+}
+/* ============================================================
+   Expertise
+   ============================================================ */
+.expertise{background:var(--cream)}
+.expertise-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,2vw,22px)}
+.expertise-card{
+  background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius);
+  padding:clamp(24px,2.4vw,34px);display:flex;flex-direction:column;gap:16px;
+  transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s;
+}
+.expertise-card:hover{transform:translateY(-5px);box-shadow:var(--shadow);border-color:transparent}
+.expertise-icon{
+  width:54px;height:54px;border-radius:50%;background:var(--cream-2);
+  display:grid;place-items:center;color:var(--forest);
+}
+.expertise-icon svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.expertise-card h3{font-size:14.5px;font-weight:700;line-height:1.35;letter-spacing:-.005em}
+.expertise-card p{font-size:12.5px;line-height:1.7;color:var(--muted);margin-top:-6px}
+.expertise-num{font-family:var(--font-display);font-size:12px;color:var(--moss);letter-spacing:.18em;margin-top:auto;padding-top:6px}
+
+/* ============================================================
+   Gallery / en action
+   ============================================================ */
+.gallery-wrap{position:relative}
+.gallery{
+  display:flex;gap:clamp(10px,1.4vw,18px);overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:4px 4px 18px;margin-inline:-4px;
+  scrollbar-width:none;
+}
+.gallery::-webkit-scrollbar{display:none}
+.gallery-item{
+  position:relative;flex:0 0 clamp(190px,23vw,290px);aspect-ratio:3/4;
+  border-radius:var(--radius);overflow:hidden;scroll-snap-align:start;background:var(--cream-2);
+}
+.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+.gallery-item:hover img{transform:scale(1.05)}
+.gallery-item::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(27,31,23,.45),transparent 45%);opacity:0;transition:opacity .4s}
+.gallery-item:hover::after{opacity:1}
+.gallery-item figcaption{
+  position:absolute;left:18px;bottom:16px;z-index:2;color:var(--cream);
+  font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;
+}
+.gallery-item:hover figcaption{opacity:1;transform:none}
+.gallery-nav{display:flex;gap:8px;justify-content:flex-end;margin-top:2px}
+.circle-btn{
+  width:42px;height:42px;border-radius:50%;border:1px solid var(--line);
+  display:grid;place-items:center;transition:background .25s,color .25s,border-color .25s;
+}
+.circle-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6}
+.circle-btn:hover{background:var(--forest);color:var(--cream);border-color:var(--forest)}
+.circle-btn:disabled{opacity:.3;pointer-events:none}
+
+/* ============================================================
+   Reviews
+   ============================================================ */
+.reviews{background:var(--paper)}
+.review-summary{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:36px}
+.review-score{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center}
+.review-score .label{font-size:18px;font-weight:500;letter-spacing:-.01em}
+.review-score b{font-family:var(--font-display);font-size:42px;font-weight:600;line-height:1}
+.review-score .out{font-size:14px;color:var(--muted)}
+.review-track-wrap{position:relative}
+.review-track{
+  display:flex;gap:clamp(14px,1.8vw,22px);overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:4px 4px 16px;scrollbar-width:none;
+}
+.review-track::-webkit-scrollbar{display:none}
+.review-card{
+  flex:0 0 calc((100% - 2 * clamp(14px,1.8vw,22px)) / 3);
+  background:var(--cream);border:1px solid var(--line-soft);border-radius:var(--radius);
+  padding:clamp(22px,2.4vw,32px);scroll-snap-align:start;
+  display:flex;flex-direction:column;gap:18px;min-height:250px;
+}
+.review-card .stars{font-size:13px;color:var(--green-star)}
+.review-quote{font-size:13.5px;line-height:1.8;color:#4a5044;flex:1}
+.review-author{display:flex;align-items:center;gap:11px;padding-top:16px;border-top:1px solid var(--line-soft)}
+.avatar{
+  width:36px;height:36px;border-radius:50%;background:var(--forest);color:var(--cream);
+  display:grid;place-items:center;font-family:var(--font-display);font-size:16px;flex:0 0 auto;
+}
+.review-author strong{display:block;font-size:12px;font-weight:700}
+.review-author small{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted)}
+.review-author small svg{width:11px;height:11px;stroke:var(--green-star);fill:none;stroke-width:2}
+.review-nav{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:12px}
+.review-progress{flex:1;height:2px;background:var(--line-soft);max-width:220px;overflow:hidden;border-radius:2px}
+.review-progress span{display:block;height:100%;background:var(--forest);width:33%;transition:transform .3s var(--ease)}
+
+/* ============================================================
+   Trust strip
+   ============================================================ */
+.trust{background:var(--cream-2);border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
+.trust-grid{display:grid;grid-template-columns:repeat(3,1fr)}
+.trust-item{display:flex;align-items:center;gap:18px;padding:30px clamp(16px,3vw,42px)}
+.trust-item+.trust-item{border-left:1px solid var(--line-soft)}
+.trust-item svg{width:30px;height:30px;stroke:var(--forest);fill:none;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+.trust-item strong{display:block;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px}
+.trust-item span{font-size:11.5px;color:var(--muted)}
+
+/* ============================================================
+   FAQ
+   ============================================================ */
+.faq{background:var(--paper)}
+.faq-wrap{max-width:900px;margin-inline:auto}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-item:first-child{border-top:1px solid var(--line)}
+.faq-q{
+  width:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;
+  padding:22px 4px;text-align:left;font-size:14.5px;font-weight:700;line-height:1.45;
+  transition:color .25s;
+}
+.faq-q:hover{color:var(--moss)}
+.faq-q .plus{
+  width:30px;height:30px;border-radius:50%;border:1px solid var(--line);
+  display:grid;place-items:center;flex:0 0 auto;position:relative;transition:background .3s,border-color .3s,transform .3s;
+}
+.faq-q .plus::before,.faq-q .plus::after{content:"";position:absolute;background:var(--ink);transition:transform .3s,background .3s}
+.faq-q .plus::before{width:11px;height:1.4px}
+.faq-q .plus::after{width:1.4px;height:11px}
+.faq-item.open .faq-q .plus{background:var(--forest);border-color:var(--forest);transform:rotate(90deg)}
+.faq-item.open .faq-q .plus::before,.faq-item.open .faq-q .plus::after{background:var(--cream)}
+.faq-item.open .faq-q .plus::after{transform:rotate(90deg)}
+.faq-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .38s var(--ease)}
+.faq-item.open .faq-a{grid-template-rows:1fr}
+.faq-a-inner{overflow:hidden}
+.faq-a p{padding:0 46px 24px 4px;font-size:13.5px;line-height:1.8;color:var(--muted);max-width:760px}
+
+/* ============================================================
+   Newsletter
+   ============================================================ */
+.newsletter{
+  position:relative;background:var(--forest);color:var(--cream);overflow:hidden;
+  padding:clamp(52px,7vw,86px) 0;
+}
+.newsletter::before{
+  content:"";position:absolute;width:560px;height:560px;border-radius:50%;
+  border:1px solid rgba(247,243,236,.12);right:-140px;top:-240px;
+}
+.newsletter::after{
+  content:"";position:absolute;width:380px;height:380px;border-radius:50%;
+  border:1px solid rgba(247,243,236,.08);right:-50px;top:-150px;
+}
+.newsletter-inner{display:flex;align-items:center;justify-content:space-between;gap:44px;position:relative;z-index:2;flex-wrap:wrap}
+.newsletter-copy{max-width:520px}
+.newsletter-copy .eyebrow{color:var(--sage);margin-bottom:16px}
+.newsletter h2{font-family:var(--font-display);font-size:clamp(32px,3.6vw,46px);font-weight:500;line-height:1.05;margin-bottom:12px}
+.newsletter p{font-size:13.5px;color:rgba(247,243,236,.7);line-height:1.75;font-weight:300}
+.newsletter-form{display:flex;gap:8px;flex:1;min-width:300px;max-width:520px;flex-wrap:wrap}
+.newsletter-form input{
+  flex:1;min-width:200px;background:rgba(247,243,236,.08);border:1px solid rgba(247,243,236,.22);
+  border-radius:100px;padding:15px 22px;color:var(--cream);font-size:13px;outline:none;
+  transition:border-color .25s,background .25s;
+}
+.newsletter-form input::placeholder{color:rgba(247,243,236,.45)}
+.newsletter-form input:focus{border-color:var(--sage);background:rgba(247,243,236,.13)}
+.newsletter .btn-light{flex:0 0 auto}
+.newsletter small{display:block;width:100%;font-size:10px;color:rgba(247,243,236,.42);margin-top:10px;letter-spacing:.02em}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.footer{background:var(--forest);color:var(--cream);padding:clamp(54px,6vw,78px) 0 0}
+.footer-grid{display:grid;grid-template-columns:1.5fr .8fr .8fr 1fr;gap:clamp(28px,4vw,60px);padding-bottom:52px}
+.footer-brand .logo{align-items:flex-start;margin-bottom:18px}
+.footer-brand .logo-word{font-size:42px;color:var(--cream)}
+.footer-brand .logo-sub{color:var(--sage)}
+.footer-brand p{font-size:12.5px;line-height:1.8;color:rgba(247,243,236,.6);max-width:320px;font-weight:300}
+.socials{display:flex;gap:10px;margin-top:22px}
+.socials a{
+  width:38px;height:38px;border-radius:50%;border:1px solid rgba(247,243,236,.22);
+  display:grid;place-items:center;transition:background .25s,color .25s,border-color .25s;
+}
+.socials a:hover{background:var(--cream);color:var(--forest);border-color:var(--cream)}
+.socials svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.footer h4{font-size:10px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--sage);margin-bottom:18px}
+.footer-links{display:grid;gap:11px;font-size:12.5px;color:rgba(247,243,236,.72)}
+.footer-links a{transition:color .2s;width:fit-content}
+.footer-links a:hover{color:var(--cream);text-decoration:underline;text-underline-offset:3px}
+.footer-contact{display:grid;gap:12px;font-size:12.5px;color:rgba(247,243,236,.72)}
+.footer-contact span{display:flex;gap:9px;align-items:flex-start;line-height:1.6}
+.footer-contact svg{width:14px;height:14px;flex:0 0 auto;margin-top:3px;stroke:var(--sage);fill:none;stroke-width:1.4}
+.payments{display:flex;gap:7px;flex-wrap:wrap;margin-top:18px}
+.pay{
+  height:26px;padding:0 9px;border-radius:5px;background:rgba(247,243,236,.1);
+  border:1px solid rgba(247,243,236,.16);display:grid;place-items:center;
+  font-size:8px;font-weight:800;letter-spacing:.06em;color:rgba(247,243,236,.75);
+}
+.footer-bottom{
+  border-top:1px solid rgba(247,243,236,.14);padding:22px 0 26px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-size:10.5px;color:rgba(247,243,236,.45);letter-spacing:.03em;
+}
+.footer-bottom a{color:rgba(247,243,236,.7)}
+.footer-bottom a:hover{color:var(--cream)}
+.to-top{display:inline-flex;align-items:center;gap:8px}
+.to-top svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.6}
+
+/* ============================================================
+   Drawers / overlays
+   ============================================================ */
+.overlay{
+  position:fixed;inset:0;z-index:90;background:rgba(24,28,21,.45);
+  opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s;
+  backdrop-filter:blur(2px);
+}
+.overlay.show{opacity:1;visibility:visible}
+.drawer{
+  position:fixed;top:0;bottom:0;z-index:100;background:var(--paper);
+  display:flex;flex-direction:column;width:min(430px,100%);
+  transform:translateX(105%);transition:transform .42s var(--ease);
+  box-shadow:-30px 0 80px -40px rgba(0,0,0,.4);
+}
+.drawer--right{right:0}
+.drawer--left{left:0;transform:translateX(-105%);width:min(360px,88vw);background:var(--cream)}
+.drawer.open{transform:none}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 22px;border-bottom:1px solid var(--line-soft)}
+.drawer-head h3{font-size:13px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+.drawer-head .sub{font-size:10.5px;color:var(--muted);letter-spacing:.02em;text-transform:none;font-weight:500}
+.close-btn{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;transition:background .25s}
+.close-btn:hover{background:var(--cream-2)}
+.close-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5}
+
+/* Cart */
+.ship-progress{padding:16px 22px;border-bottom:1px solid var(--line-soft);background:var(--cream)}
+.ship-progress p{font-size:11px;color:var(--muted);margin-bottom:9px;display:flex;align-items:center;gap:6px}
+.ship-progress p svg{width:13px;height:13px;stroke:var(--moss);fill:none;stroke-width:1.6}
+.ship-bar{height:4px;border-radius:4px;background:rgba(37,42,32,.12);overflow:hidden}
+.ship-bar span{display:block;height:100%;width:0;background:var(--moss);border-radius:4px;transition:width .5s var(--ease)}
+.cart-items{flex:1;overflow-y:auto;padding:6px 22px}
+.cart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;height:100%;text-align:center;padding:30px 10px;color:var(--muted)}
+.cart-empty svg{width:46px;height:46px;stroke:var(--moss);fill:none;stroke-width:1}
+.cart-empty p{font-size:13px;line-height:1.7;max-width:230px}
+.cart-line{display:grid;grid-template-columns:74px 1fr;gap:14px;padding:16px 0;border-bottom:1px solid var(--line-soft)}
+.cart-line-media{background:radial-gradient(circle at 50% 34%,#fffdf8,var(--pbg,#eef0e7) 80%);border-radius:12px;display:grid;place-items:center;aspect-ratio:1;overflow:hidden}
+.cart-line-media .art{width:78%;filter:drop-shadow(0 8px 10px rgba(47,54,39,.14))}
+.cart-line-body{display:flex;flex-direction:column;gap:4px;min-width:0}
+.cart-line-cat{font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--moss)}
+.cart-line-name{font-size:12.5px;font-weight:700;line-height:1.35;padding-right:24px}
+.cart-line-price{font-size:11.5px;color:var(--muted);margin-top:2px}
+.cart-line-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:8px}
+.qty{display:flex;align-items:center;border:1px solid var(--line);border-radius:50px;overflow:hidden}
+.qty button{width:27px;height:27px;display:grid;place-items:center;font-size:14px;color:var(--muted);transition:background .2s,color .2s}
+.qty button:hover{background:var(--forest);color:var(--cream)}
+.qty span{min-width:24px;text-align:center;font-size:11px;font-weight:700}
+.remove-line{font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.remove-line:hover{color:#9c4f3f}
+.drawer-foot{padding:18px 22px 22px;border-top:1px solid var(--line);background:var(--paper)}
+.subtotal{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;font-size:13px;font-weight:600}
+.subtotal b{font-size:17px;font-weight:800}
+.drawer-note{font-size:10px;color:var(--muted);margin-bottom:14px;display:flex;gap:6px;align-items:center}
+.drawer-note svg{width:12px;height:12px;stroke:var(--moss);fill:none;stroke-width:1.6}
+.secure{display:flex;align-items:center;justify-content:center;gap:7px;font-size:9.5px;color:var(--muted);margin-top:12px;letter-spacing:.04em}
+.secure svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:1.5}
+
+/* Mobile nav */
+.mobile-nav{display:flex;flex-direction:column;gap:2px;padding:14px 22px;overflow-y:auto}
+.mobile-nav a{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 4px;border-bottom:1px solid var(--line-soft);
+  font-family:var(--font-display);font-size:25px;font-weight:500;
+}
+.mobile-nav a small{font-family:var(--font-body);font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--moss)}
+.mobile-nav a svg{width:16px;height:16px;stroke:var(--moss);fill:none;stroke-width:1.5}
+.mobile-nav-foot{margin-top:auto;padding:22px;border-top:1px solid var(--line-soft);font-size:12px;color:var(--muted)}
+.mobile-nav-foot strong{display:block;color:var(--ink);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+
+/* Search */
+.search-panel{
+  position:fixed;left:0;right:0;top:0;z-index:110;background:var(--paper);
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.4);
+  transform:translateY(-100%);transition:transform .4s var(--ease);
+  padding:26px 0 30px;
+}
+.search-panel.open{transform:none}
+.search-head{display:flex;align-items:center;gap:14px}
+.search-head svg{width:22px;height:22px;stroke:var(--ink);fill:none;stroke-width:1.5;flex:0 0 auto}
+.search-head input{flex:1;border:0;border-bottom:1px solid var(--line);background:none;padding:10px 2px;font-size:22px;font-family:var(--font-display);outline:none;color:var(--ink)}
+.search-head input::placeholder{color:#a9ada2}
+.search-head input::-webkit-search-cancel-button,
+.search-head input::-webkit-search-decoration{-webkit-appearance:none;appearance:none;display:none}
+.search-results{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px;max-height:52vh;overflow-y:auto}
+.search-empty{font-size:12.5px;color:var(--muted);margin-top:18px}
+.search-result{display:flex;gap:10px;align-items:center;padding:9px;border-radius:12px;text-align:left;transition:background .2s;width:100%}
+.search-result:hover{background:var(--cream-2)}
+.search-result .mini-art{width:48px;height:54px;flex:0 0 auto;background:radial-gradient(circle at 50% 34%,#fffdf8,var(--pbg,#eef0e7) 80%);border-radius:8px;display:grid;place-items:center}
+.search-result .mini-art svg{width:72%;height:auto;filter:none}
+.search-result strong{display:block;font-size:11.5px;font-weight:700;line-height:1.3}
+.search-result small{font-size:10px;color:var(--muted)}
+.search-hint{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:18px}
+
+/* Toast */
+.toast{
+  position:fixed;left:50%;bottom:26px;z-index:200;transform:translate(-50%,140%);
+  background:var(--forest);color:var(--cream);padding:13px 20px;border-radius:100px;
+  display:flex;align-items:center;gap:10px;font-size:11.5px;font-weight:600;letter-spacing:.02em;
+  box-shadow:0 20px 40px -18px rgba(0,0,0,.5);transition:transform .45s var(--ease);
+  max-width:calc(100vw - 32px);
+}
+.toast.show{transform:translate(-50%,0)}
+.toast svg{width:15px;height:15px;stroke:var(--sage);fill:none;stroke-width:2;flex:0 0 auto}
+
+/* Reveal on scroll */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal[data-delay="1"]{transition-delay:.08s}
+.reveal[data-delay="2"]{transition-delay:.16s}
+.reveal[data-delay="3"]{transition-delay:.24s}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width:1120px){
+  .header-nav{display:none}
+  .hamburger{display:inline-flex;flex-direction:column;justify-content:center;align-items:center}
+  .grid--4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .expertise-grid{grid-template-columns:repeat(2,1fr)}
+  .review-card{flex-basis:calc((100% - clamp(14px,1.8vw,22px)) / 2)}
+  .search-results{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:900px){
+  .hero-inner{grid-template-columns:1fr;min-height:0}
+  .hero-copy{padding:clamp(42px,9vw,66px) 24px clamp(60px,10vw,80px);order:2}
+  .hero-media{order:1;height:clamp(340px,52vh,480px)}
+  .hero-media::after{background:linear-gradient(0deg,rgba(47,54,39,.3),transparent 40%)}
+  .hero-copy .eyebrow{margin-bottom:18px}
+  .hero h1{font-size:clamp(42px,9vw,62px)}
+  .hero-dots{left:auto;right:24px;bottom:auto;top:20px}
+  .hero-count{display:none}
+  .hero-proof{flex-wrap:wrap;gap:10px 16px;margin-top:26px}
+  .hero-proof .sep{display:none}
+  .cat-rail ul{grid-template-columns:repeat(2,1fr)}
+  .cat-rail li:nth-child(3){border-left:0;border-top:1px solid var(--line-soft)}
+  .cat-rail li:nth-child(4){border-top:1px solid var(--line-soft)}
+  .feature-inner{grid-template-columns:1fr;min-height:0}
+  .feature-media{height:340px;order:-1}
+  .feature-media::after{background:linear-gradient(0deg,var(--forest),transparent 30%)}
+  .feature-copy{padding:34px 28px 40px}
+  .univers-grid{grid-template-columns:1fr;gap:12px}
+  .univers-card{aspect-ratio:16/10}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:36px 28px}
+  .footer-brand{grid-column:1/-1}
+  .trust-grid{grid-template-columns:1fr}
+  .trust-item+.trust-item{border-left:0;border-top:1px solid var(--line-soft)}
+  .search-results{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:720px){
+  .wrap{width:calc(100% - 36px)}
+  :root{--header-h:70px}
+  .logo-word{font-size:30px}
+  .logo-mark{width:22px;height:22px}
+  .header-right .icon-btn[data-open="account"]{display:none}
+  .section{padding:54px 0}
+  .grid--3{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid--4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .product-name{font-size:13.5px}
+  .quick-add{opacity:1;transform:none;left:auto;right:10px;bottom:10px;width:38px;height:38px;padding:0;border-radius:50%}
+  .quick-add span{display:none}
+  .quick-add svg{width:15px;height:15px}
+  .product-badge{font-size:7.5px;padding:5px 9px}
+  .wish{width:32px;height:32px}
+  .review-card{flex-basis:calc((100% - clamp(14px,1.8vw,22px)) / 1.15)}
+  .review-track{padding-right:16px}
+  .cat-rail a{padding:16px 14px;font-size:10px;letter-spacing:.12em}
+  .cat-rail a small{display:none}
+  .newsletter-inner{flex-direction:column;align-items:flex-start;gap:26px}
+  .newsletter-form{width:100%;max-width:none}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .footer-bottom{flex-direction:column;align-items:flex-start}
+  .search-results{grid-template-columns:1fr}
+  .toast{font-size:10.5px;padding:12px 16px}
+}
+@media (max-width:520px){
+  .expertise-grid{grid-template-columns:1fr}
+  .grid--3,.grid--4{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .product-info{padding-top:12px}
+  .product-meta{flex-direction:column;align-items:flex-start;gap:3px}
+  .product-media{aspect-ratio:1/1.12}
+  .review-score b{font-size:34px}
+  .review-card{flex-basis:86%}
+  .newsletter-form .btn{width:100%}
+  .footer-grid{grid-template-columns:1fr}
+  .footer-bottom small{line-height:1.6}
+  .hero-actions{width:100%}
+  .hero-actions .btn{flex:1 1 auto}
+  .section-head h2{font-size:34px}
+  .search-head input{font-size:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
+  .reveal{opacity:1;transform:none}
+  .hero-img{transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+
+<!-- Announcement -->
+<div class="announce" aria-hidden="true">
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>Testés & approuvés par plus de 200 000 clientes</span>
+      <span>Livraison offerte dès 10 000 DA</span>
+      <span>Paiement à la livraison partout en Algérie</span>
+      <span>Formules naturelles & testées dermatologiquement</span>
+      <span>Testés & approuvés par plus de 200 000 clientes</span>
+      <span>Livraison offerte dès 10 000 DA</span>
+      <span>Paiement à la livraison partout en Algérie</span>
+      <span>Formules naturelles & testées dermatologiquement</span>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="site-header" id="header">
+  <div class="wrap header-inner">
+    <div class="header-left">
+      <button class="icon-btn hamburger" id="openMenu" aria-label="Ouvrir le menu" aria-controls="mobileNav" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="header-nav" aria-label="Navigation principale">
+        <a href="#accueil">Accueil</a>
+        <a href="#nouveautes">Nos produits</a>
+        <a href="#perfect-hair">Nos offres</a>
+        <a href="#faq">Contact</a>
+      </nav>
+    </div>
+    <a class="logo" href="#accueil" aria-label="Nouré, accueil">
+      <svg class="logo-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <path d="M16 28c0-8 3-13 10-16-1 7-4 12-10 16Z" stroke="#6e7d59" stroke-width="1.2"/>
+        <path d="M16 28C16 19 12 13 5 11c1 8 4 13 11 17Z" stroke="#6e7d59" stroke-width="1.2"/>
+        <path d="M16 28V15" stroke="#6e7d59" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+      <span class="logo-word">Nouré</span>
+      <span class="logo-sub">cosmetics</span>
+    </a>
+    <div class="header-right">
+      <button class="icon-btn" id="openSearch" aria-label="Rechercher un produit">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4.5 4.5"/></svg>
+      </button>
+      <button class="icon-btn" data-open="account" aria-label="Mon compte">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 21c.8-4 3.8-6 7.5-6s6.7 2 7.5 6"/></svg>
+      </button>
+      <button class="icon-btn cart-btn" id="openCart" aria-label="Ouvrir le panier" aria-controls="cartDrawer" aria-expanded="false">
+        <svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 12.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        <span class="count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- Cart drawer -->
+<aside class="drawer drawer--right" id="cartDrawer" role="dialog" aria-modal="true" aria-label="Panier" aria-hidden="true">
+  <div class="drawer-head">
+    <h3>Panier <span class="sub" id="cartHeadCount">0 article</span></h3>
+    <button class="close-btn" data-close-cart aria-label="Fermer le panier">
+      <svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <div class="ship-progress">
+    <p id="shipMessage">
+      <svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg>
+      <span>Livraison offerte dès 10 000 DA</span>
+    </p>
+    <div class="ship-bar"><span id="shipBar"></span></div>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="drawer-foot">
+    <div class="subtotal"><span>Sous-total</span><b id="cartTotal">0 DA</b></div>
+    <p class="drawer-note">
+      <svg viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.4 8.2 8 9 4.6-.8 8-4 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+      Taxes incluses. Frais de livraison calculés à la commande.
+    </p>
+    <button class="btn btn-block" id="checkoutBtn">
+      Passer la commande
+      <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+    <p class="secure">
+      <svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+      Paiement sécurisé · Livraison 58 wilayas
+    </p>
+  </div>
+</aside>
+
+<!-- Mobile nav -->
+<aside class="drawer drawer--left" id="mobileNav" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+  <div class="drawer-head">
+    <h3>Menu</h3>
+    <button class="close-btn" data-close-menu aria-label="Fermer le menu">
+      <svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <nav class="mobile-nav" aria-label="Navigation mobile">
+    <a href="#accueil" data-close-menu>Accueil <small>01</small></a>
+    <a href="#nouveautes" data-close-menu>Nouveautés <small>02</small></a>
+    <a href="#skincare" data-close-menu>Skincare <small>03</small></a>
+    <a href="#perfect-hair" data-close-menu>Perfect Hair <small>04</small></a>
+    <a href="#faq" data-close-menu>FAQ <small>05</small></a>
+  </nav>
+  <div class="mobile-nav-foot">
+    <strong>Service client</strong>
+    <p>Du samedi au jeudi, 9h — 18h<br>+213 (0) 555 00 00 00</p>
+  </div>
+</aside>
+
+<!-- Search -->
+<div class="search-panel" id="searchPanel" role="dialog" aria-modal="true" aria-label="Recherche">
+  <div class="wrap">
+    <div class="search-head">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4.5 4.5"/></svg>
+      <input id="searchInput" type="search" placeholder="Rechercher un soin, un ingrédient…" autocomplete="off" aria-label="Rechercher">
+      <button class="close-btn" data-close-search aria-label="Fermer la recherche">
+        <svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+    <p class="search-hint">Appuyez sur Échap pour fermer · Entrée pour voir les résultats</p>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <svg viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></svg>
+  <span id="toastText">Ajouté au panier</span>
+</div>
+
+<main id="contenu">
+  <!-- Hero -->
+  <section class="hero" id="accueil">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <div class="hero-slides">
+          <article class="hero-slide active">
+            <span class="eyebrow">Nouvelle collection · Perfect Skin</span>
+            <h1>L'éclat naturel de votre peau, <em>révélé.</em></h1>
+            <p>Des formules douces et concentrées, testées dermatologiquement, pensées pour révéler la lumière de chaque peau — même la plus sensible.</p>
+          </article>
+          <article class="hero-slide" aria-hidden="true">
+            <span class="eyebrow">Collection signature · Perfect Hair</span>
+            <h1>Des cheveux forts, souples et <em>lumineux.</em></h1>
+            <p>Un rituel capillaire complet, du cuir chevelu aux pointes, formulé avec des actifs naturels et une technologie de soin innovante.</p>
+          </article>
+          <article class="hero-slide" aria-hidden="true">
+            <span class="eyebrow">Rituel corps · Douceur</span>
+            <h1>Le soin qui enveloppe votre <em>peau.</em></h1>
+            <p>Des textures fondantes et des parfums délicats pour transformer chaque geste du quotidien en un moment de bien-être.</p>
+          </article>
+        </div>
+        <div class="hero-actions">
+          <a class="btn btn-light" href="#nouveautes">
+            Découvrir la collection
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn-ghost" href="#best-sellers">Nos best-sellers</a>
+        </div>
+        <div class="hero-proof">
+          <span class="stars" aria-hidden="true">★★★★★</span>
+          <span><strong>4,9 / 5</strong> · plus de 2 000 avis</span>
+          <span class="sep" aria-hidden="true"></span>
+          <span>100 % fabriqué en Algérie</span>
+        </div>
+      </div>
+      <div class="hero-media">
+        <img class="hero-img active" src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=1400&q=80" alt="Portrait d'une femme au teint lumineux">
+        <img class="hero-img" src="https://images.unsplash.com/photo-1522338242992-e1a54906a8da?auto=format&fit=crop&w=1400&q=80" alt="Cheveux longs et souples vus de dos" loading="lazy">
+        <img class="hero-img" src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=1400&q=80" alt="Crème de soin appliquée sur la peau" loading="lazy">
+      </div>
+    </div>
+    <div class="hero-dots" role="tablist" aria-label="Diapositives">
+      <button class="active" data-slide="0" role="tab" aria-selected="true" aria-label="Perfect Skin"></button>
+      <button data-slide="1" role="tab" aria-selected="false" aria-label="Perfect Hair"></button>
+      <button data-slide="2" role="tab" aria-selected="false" aria-label="Rituel corps"></button>
+    </div>
+    <div class="hero-count"><b>01</b> / 03</div>
+  </section>
+
+  <!-- Category rail -->
+  <nav class="cat-rail" aria-label="Catégories">
+    <div class="wrap" style="width:min(1280px,100%)">
+      <ul>
+        <li><a href="#skincare"><span>Soins visage <small>04</small></span><svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li>
+        <li><a href="#perfect-hair"><span>Cheveux <small>04</small></span><svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li>
+        <li><a href="#nouveautes"><span>Corps <small>03</small></span><svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li>
+        <li><a href="#nouveautes"><span>Coffrets <small>02</small></span><svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Univers -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow center">Nos univers</span>
+        <h2>Un soin pour chaque rituel</h2>
+        <p>Trois collections complémentaires, une même exigence : des ingrédients naturels, des formules efficaces et un plaisir sensoriel.</p>
+      </div>
+      <div class="univers-grid">
+        <a class="univers-card reveal" href="#skincare">
+          <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=900&q=80" alt="Soins du visage" loading="lazy">
+          <span class="univers-label"><span><small>01 · Skincare</small><h3>Visage</h3></span><span class="arrow"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></span></span>
+        </a>
+        <a class="univers-card reveal" data-delay="1" href="#perfect-hair">
+          <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80" alt="Soins capillaires" loading="lazy">
+          <span class="univers-label"><span><small>02 · Perfect Hair</small><h3>Cheveux</h3></span><span class="arrow"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></span></span>
+        </a>
+        <a class="univers-card reveal" data-delay="2" href="#nouveautes">
+          <img src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=900&q=80" alt="Soins du corps" loading="lazy">
+          <span class="univers-label"><span><small>03 · Rituel corps</small><h3>Corps</h3></span><span class="arrow"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Nouveautés -->
+  <section class="section section--paper" id="nouveautes">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow center">Fraîchement arrivés</span>
+        <h2>Nouveautés</h2>
+        <p>Les dernières créations Nouré, imaginées pour compléter votre rituel beauté.</p>
+      </div>
+      <div class="grid grid--3" id="grid-new"></div>
+      <div class="section-foot reveal">
+        <a class="btn btn-outline" href="#best-sellers">Voir tous les produits
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skincare -->
+  <section class="section" id="skincare">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow center">Soins visage</span>
+        <h2>Skincare</h2>
+        <p>Nettoyer, hydrater, protéger. Une routine simple et sensorielle pour une peau visiblement plus belle.</p>
+      </div>
+      <div class="grid grid--4" id="grid-skin"></div>
+    </div>
+  </section>
+
+  <!-- Feature Perfect Hair -->
+  <section class="section" id="best-sellers" style="padding-top:0">
+    <div class="wrap">
+      <div class="feature reveal">
+        <div class="feature-inner">
+          <div class="feature-copy">
+            <span class="eyebrow">Collection signature</span>
+            <h2>Perfect <em>Hair</em></h2>
+            <p>Un rituel complet qui répare, fortifie et sublime. Des textures légères, des actifs concentrés, des résultats visibles dès les premières utilisations.</p>
+            <ul class="feature-list">
+              <li><svg viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></svg>Sans sulfates ni parabènes</li>
+              <li><svg viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></svg>98 % d'ingrédients d'origine naturelle</li>
+              <li><svg viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></svg>Convient à tous les types de cheveux</li>
+            </ul>
+            <a class="btn btn-light" href="#perfect-hair">Explorer la collection
+              <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+          <div class="feature-media">
+            <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80" alt="Femme aux cheveux brillants" loading="lazy">
+            <span class="feature-tag">Best-seller</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Perfect Hair produits -->
+  <section class="section section--paper" id="perfect-hair" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow center">La collection</span>
+        <h2>Perfect Hair</h2>
+        <p>Du toner au sérum, chaque soin a été pensé pour s'utiliser seul ou en rituel complet.</p>
+      </div>
+      <div class="grid grid--4" id="grid-hair"></div>
+    </div>
+  </section>
+  <!-- Expertise -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow center">Notre engagement</span>
+        <h2>Notre expertise</h2>
+        <p>La beauté naturelle, sans compromis sur l'efficacité, la sécurité ni le plaisir.</p>
+      </div>
+      <div class="expertise-grid">
+        <article class="expertise-card reveal">
+          <div class="expertise-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 3 4.5 6v6c0 4.8 3.2 7.8 7.5 9 4.3-1.2 7.5-4.2 7.5-9V6L12 3Z"/><path d="m8.5 12 2.2 2.2 4.8-4.8"/></svg>
+          </div>
+          <h3>Testés et approuvés dermatologiquement</h3>
+          <p>Chaque formule est testée pour garantir sa tolérance et son efficacité, même sur les peaux et cheveux sensibles.</p>
+          <span class="expertise-num">01</span>
+        </article>
+        <article class="expertise-card reveal" data-delay="1">
+          <div class="expertise-icon">
+            <svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6.2L5.6 17A2.5 2.5 0 0 0 7.8 21h8.4a2.5 2.5 0 0 0 2.2-4L14 9.2V3"/><path d="M7.2 15h9.6"/></svg>
+          </div>
+          <h3>Formules innovantes</h3>
+          <p>Science et nature se rencontrent dans des textures légères et des actifs concentrés aux résultats visibles.</p>
+          <span class="expertise-num">02</span>
+        </article>
+        <article class="expertise-card reveal" data-delay="2">
+          <div class="expertise-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 21c0-6 2.4-10 8-12-.6 6-3.4 10-8 12Z"/><path d="M12 21C12 15 9.6 11 4 9c.6 6 3.4 10 8 12Z"/><path d="M12 21v-9"/></svg>
+          </div>
+          <h3>Engagé pour le bien-être</h3>
+          <p>Des ingrédients sûrs, des packagings responsables et des soins conçus pour faire du bien, vraiment.</p>
+          <span class="expertise-num">03</span>
+        </article>
+        <article class="expertise-card reveal" data-delay="3">
+          <div class="expertise-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="5"/><path d="m9 13-1.5 8 4.5-2.4L16.5 21 15 13"/></svg>
+          </div>
+          <h3>Marque 100 % algérienne</h3>
+          <p>Fiers de nos racines, nous formulons et fabriquons localement avec soin, passion et exigence.</p>
+          <span class="expertise-num">04</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="section section--paper">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow center">En images</span>
+        <h2>Nos produits en action</h2>
+        <p>Partagés par notre communauté, jour après jour.</p>
+      </div>
+      <div class="gallery-wrap reveal">
+        <div class="gallery" id="gallery">
+          <figure class="gallery-item"><img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=600&q=80" alt="Cliente Nouré" loading="lazy"><figcaption>@noure.dz</figcaption></figure>
+          <figure class="gallery-item"><img src="https://images.unsplash.com/photo-1522338242992-e1a54906a8da?auto=format&fit=crop&w=600&q=80" alt="Cheveux soignés avec Nouré" loading="lazy"><figcaption>@perfect.hair</figcaption></figure>
+          <figure class="gallery-item"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=600&q=80" alt="Rituel visage Nouré" loading="lazy"><figcaption>@noure.skin</figcaption></figure>
+          <figure class="gallery-item"><img src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=600&q=80" alt="Crème hydratante Nouré" loading="lazy"><figcaption>@rituel.corps</figcaption></figure>
+          <figure class="gallery-item"><img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80" alt="Soin capillaire Nouré" loading="lazy"><figcaption>@noure.dz</figcaption></figure>
+          <figure class="gallery-item"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=600&q=80" alt="Cliente Nouré" loading="lazy"><figcaption>@beaute.naturelle</figcaption></figure>
+          <figure class="gallery-item"><img src="https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?auto=format&fit=crop&w=600&q=80" alt="Portrait beauté" loading="lazy"><figcaption>@noure.community</figcaption></figure>
+          <figure class="gallery-item"><img src="https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?auto=format&fit=crop&w=600&q=80" alt="Sérum Nouré" loading="lazy"><figcaption>@noure.lab</figcaption></figure>
+        </div>
+        <div class="gallery-nav">
+          <button class="circle-btn" id="galPrev" aria-label="Images précédentes"><svg viewBox="0 0 24 24"><path d="M15 6 9 12l6 6"/></svg></button>
+          <button class="circle-btn" id="galNext" aria-label="Images suivantes"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews -->
+  <section class="section reviews">
+    <div class="wrap">
+      <div class="section-head reveal" style="margin-bottom:22px">
+        <span class="eyebrow center">Elles en parlent</span>
+        <h2>L'avis de nos clientes</h2>
+      </div>
+      <div class="review-summary reveal">
+        <div class="review-score">
+          <span class="label">Excellent</span>
+          <b>4,9</b><span class="out">/ 5</span>
+          <span class="stars" aria-label="5 étoiles sur 5">★★★★★</span>
+        </div>
+        <p style="font-size:11.5px;color:var(--muted)">Basé sur 2 148 avis vérifiés</p>
+      </div>
+      <div class="review-track-wrap reveal">
+        <div class="review-track" id="reviewTrack">
+          <article class="review-card">
+            <span class="stars" aria-hidden="true">★★★★★</span>
+            <p class="review-quote">« Franchement bluffée. Dès la première utilisation mes cheveux sont plus souples et beaucoup moins de chute. Je ne reviendrai pas en arrière. »</p>
+            <div class="review-author"><span class="avatar">Y</span><span><strong>Yasmine</strong><small><svg viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></svg>Achat vérifié</small></span></div>
+          </article>
+          <article class="review-card">
+            <span class="stars" aria-hidden="true">★★★★★</span>
+            <p class="review-quote">« Le packaging est magnifique et le petit cadeau dans le colis m'a fait très plaisir. Trop fière qu'une marque algérienne propose cette qualité. »</p>
+            <div class="review-author"><span class="avatar">M</span><span><strong>Meriem</strong><small><svg viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></svg>Achat vérifié</small></span></div>
+          </article>
+          <article class="review-card">
+            <span class="stars" aria-hidden="true">★★★★★</span>
+            <p class="review-quote">« Ma troisième commande, toujours la même qualité. La crème hydratante est devenue indispensable dans ma routine du soir. »</p>
+            <div class="review-author"><span class="avatar">N</span><span><strong>Nesrine</strong><small><svg viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></svg>Achat vérifié</small></span></div>
+          </article>
+          <article class="review-card">
+            <span class="stars" aria-hidden="true">★★★★★</span>
+            <p class="review-quote">« Je suis venue remercier pour ces produits. Dès la première utilisation j'ai remarqué de la brillance et mes cheveux sont plus faciles à coiffer. »</p>
+            <div class="review-author"><span class="avatar">L</span><span><strong>Lina</strong><small><svg viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></svg>Achat vérifié</small></span></div>
+          </article>
+          <article class="review-card">
+            <span class="stars" aria-hidden="true">★★★★★</span>
+            <p class="review-quote">« Livraison très rapide et service client au top. Le sérum sent divinement bon et ne laisse aucun film gras. Je recommande les yeux fermés. »</p>
+            <div class="review-author"><span class="avatar">S</span><span><strong>Sarah</strong><small><svg viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></svg>Achat vérifié</small></span></div>
+          </article>
+        </div>
+        <div class="review-nav">
+          <div class="review-progress"><span id="reviewBar"></span></div>
+          <div style="display:flex;gap:8px">
+            <button class="circle-btn" id="revPrev" aria-label="Avis précédents"><svg viewBox="0 0 24 24"><path d="M15 6 9 12l6 6"/></svg></button>
+            <button class="circle-btn" id="revNext" aria-label="Avis suivants"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust -->
+  <section class="trust">
+    <div class="wrap trust-grid">
+      <div class="trust-item">
+        <svg viewBox="0 0 32 32"><path d="M4 9h14v14H4z"/><path d="M18 13h6l4 4v6h-10z"/><circle cx="9" cy="25" r="2.2"/><circle cx="23" cy="25" r="2.2"/><path d="M4 9V7h10v2"/></svg>
+        <div><strong>Livraison rapide</strong><span>Dans les 58 wilayas, en 24 à 72 h</span></div>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 32 32"><rect x="4" y="9" width="24" height="15" rx="2"/><circle cx="16" cy="16.5" r="4"/><path d="M8 9V6h16v3"/></svg>
+        <div><strong>Paiement à la livraison</strong><span>Vous payez uniquement à réception</span></div>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 32 32"><path d="M7 23v-6a9 9 0 0 1 18 0v6"/><rect x="4" y="20" width="5" height="7" rx="2"/><rect x="23" y="20" width="5" height="7" rx="2"/><path d="M25 27c0 2-2 3-5 3"/></svg>
+        <div><strong>Service client 7j/7</strong><span>Une équipe à votre écoute, en français & arabe</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section faq" id="faq">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow center">Questions fréquentes</span>
+        <h2>On vous répond</h2>
+        <p>Tout ce qu'il faut savoir avant de commencer votre rituel Nouré.</p>
+      </div>
+      <div class="faq-wrap reveal">
+        <div class="faq-item open">
+          <button class="faq-q" aria-expanded="true">Quels sont les ingrédients utilisés dans vos produits ?<span class="plus" aria-hidden="true"></span></button>
+          <div class="faq-a"><div class="faq-a-inner"><p>Nos formules sont composées à 98 % d'ingrédients d'origine naturelle, sélectionnés pour leur efficacité et leur tolérance : huiles végétales, extraits botaniques, glycérine végétale et actifs dermatologiques. La liste complète est indiquée sur chaque emballage.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Vos produits conviennent-ils à tous les types de cheveux ?<span class="plus" aria-hidden="true"></span></button>
+          <div class="faq-a"><div class="faq-a-inner"><p>Oui. La collection Perfect Hair est formulée pour les cheveux secs, gras, bouclés, lisses ou colorés. Chaque soin peut être utilisé seul ou combiné aux autres pour créer le rituel qui vous correspond.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Vos produits sont-ils sans parabènes et sans sulfates ?<span class="plus" aria-hidden="true"></span></button>
+          <div class="faq-a"><div class="faq-a-inner"><p>Tous nos soins sont formulés sans parabènes ni sulfates agressifs, pour un nettoyage doux qui respecte l'équilibre de la peau et du cuir chevelu.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Combien de temps faut-il pour voir des résultats ?<span class="plus" aria-hidden="true"></span></button>
+          <div class="faq-a"><div class="faq-a-inner"><p>Les premiers effets — douceur, brillance, confort — sont généralement visibles dès les premières utilisations. Pour des résultats durables sur la fibre capillaire ou l'éclat de la peau, comptez quelques semaines d'utilisation régulière.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Quels sont les délais de livraison ?<span class="plus" aria-hidden="true"></span></button>
+          <div class="faq-a"><div class="faq-a-inner"><p>La livraison est assurée dans les 58 wilayas. Comptez 24 h à Alger et 48 à 72 h pour le reste du pays. Notre équipe vous contacte systématiquement avant l'expédition pour confirmer votre commande.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Où puis-je acheter vos produits ?<span class="plus" aria-hidden="true"></span></button>
+          <div class="faq-a"><div class="faq-a-inner"><p>Vous pouvez commander directement sur notre site, avec paiement à la livraison. Certains de nos soins sont également disponibles dans une sélection de points de vente partenaires en Algérie.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter">
+    <div class="wrap newsletter-inner">
+      <div class="newsletter-copy reveal">
+        <span class="eyebrow">Le club Nouré</span>
+        <h2>−10 % sur votre premier rituel</h2>
+        <p>Inscrivez-vous pour recevoir nos conseils beauté, nos nouveautés en avant-première et votre code de bienvenue.</p>
+      </div>
+      <form class="newsletter-form reveal" data-delay="1" id="newsletterForm" novalidate>
+        <input type="email" name="email" placeholder="Votre adresse e-mail" aria-label="Votre adresse e-mail" required>
+        <button class="btn btn-light" type="submit">Je m'inscris
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <small>En vous inscrivant, vous acceptez de recevoir nos e-mails. Désinscription à tout moment.</small>
+      </form>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="logo" href="#accueil" aria-label="Nouré, accueil">
+          <svg class="logo-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path d="M16 28c0-8 3-13 10-16-1 7-4 12-10 16Z" stroke="#9aa985" stroke-width="1.2"/>
+            <path d="M16 28C16 19 12 13 5 11c1 8 4 13 11 17Z" stroke="#9aa985" stroke-width="1.2"/>
+            <path d="M16 28V15" stroke="#9aa985" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <span class="logo-word">Nouré</span>
+          <span class="logo-sub">cosmetics</span>
+        </a>
+        <p>Des soins naturels et efficaces, formulés en Algérie avec exigence et passion. Pour révéler, chaque jour, votre éclat naturel.</p>
+        <div class="socials">
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".8" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M14.5 8.5H17V5h-2.5A4.5 4.5 0 0 0 10 9.5V12H7.5v3.5H10V22h3.5v-6.5H16l.5-3.5h-3V9.5c0-.6.4-1 1-1Z"/></svg></a>
+          <a href="#" aria-label="TikTok"><svg viewBox="0 0 24 24"><path d="M14 4v10.5a3.5 3.5 0 1 1-3-3.46"/><path d="M14 4c.4 2.5 1.9 4 4.5 4.4"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Boutique</h4>
+        <div class="footer-links">
+          <a href="#nouveautes">Nouveautés</a>
+          <a href="#skincare">Skincare</a>
+          <a href="#perfect-hair">Perfect Hair</a>
+          <a href="#best-sellers">Nos offres</a>
+          <a href="#nouveautes">Coffrets</a>
+        </div>
+      </div>
+      <div>
+        <h4>Informations</h4>
+        <div class="footer-links">
+          <a href="#faq">FAQ</a>
+          <a href="#faq">Livraison & retours</a>
+          <a href="#faq">Conditions générales</a>
+          <a href="#faq">Politique de confidentialité</a>
+          <a href="#faq">Contact</a>
+        </div>
+      </div>
+      <div>
+        <h4>Nous contacter</h4>
+        <div class="footer-contact">
+          <span><svg viewBox="0 0 24 24"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>Alger, Algérie</span>
+          <span><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1.1 1A17 17 0 0 1 4 5.1 1 1 0 0 1 5 4Z"/></svg>+213 (0) 555 00 00 00</span>
+          <span><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>bonjour@noure.dz</span>
+        </div>
+        <div class="payments" aria-label="Moyens de paiement">
+          <span class="pay">CIB</span><span class="pay">VISA</span><span class="pay">MASTERCARD</span><span class="pay">À LA LIVRAISON</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <small>© 2026, Nouré cosmetics — Site de démonstration. Tous droits réservés.</small>
+      <a class="to-top" href="#accueil">Retour en haut
+        <svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+'use strict';
+
+/* ============ Helpers ============ */
+const $  = (sel, ctx = document) => ctx.querySelector(sel);
+const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
+const money = n => Math.round(n).toLocaleString('fr-FR').replace(/[\u202f\u00a0]/g, ' ').replace(/,/g, ' ') + ' DA';
+
+const PRODUCTS = [
+  { id:'gel-douche',   name:'Gel Douche Douceur',        cat:'Corps',   price:1650, tint:'#adbb92', bg:'#eef2e6', shape:'tube',    label:'GEL DOUCHE',   badge:'Nouveau',     rating:4.8 },
+  { id:'shampooing',   name:'Shampooing Fortifiant',     cat:'Cheveux', price:1600, tint:'#9fae86', bg:'#edf0e4', shape:'pump',    label:'SHAMPOOING',   badge:'Nouveau',     rating:4.9 },
+  { id:'apres-shampooing', name:'Après-Shampooing Réparateur', cat:'Cheveux', price:1500, tint:'#c3ae8a', bg:'#f3ede2', shape:'pump', label:'APRÈS-SHAMPOOING', badge:'Nouveau', rating:4.7 },
+  { id:'gel-nettoyant', name:'Gel Nettoyant Purifiant',  cat:'Visage',  price:1750, tint:'#a8bfae', bg:'#e9f0ea', shape:'tube',    label:'GEL NETTOYANT', badge:null,          rating:4.8 },
+  { id:'creme-hydratante', name:'Crème Hydratante',      cat:'Visage',  price:1900, tint:'#d8bda9', bg:'#f5ece4', shape:'jar',     label:'HYDRATANTE',    badge:'Best-seller', rating:5.0 },
+  { id:'spf-50',       name:'Crème Protectrice SPF 50',  cat:'Visage',  price:1500, tint:'#d9c49a', bg:'#f6f0e2', shape:'tube',    label:'SPF 50',        badge:null,          rating:4.9 },
+  { id:'serum-eclat',  name:'Sérum Éclat',               cat:'Visage',  price:1850, tint:'#c9a878', bg:'#f5ecdd', shape:'dropper', label:'SÉRUM ÉCLAT',   badge:'Best-seller', rating:4.9 },
+  { id:'toner',        name:'Toner Cuir Chevelu',        cat:'Cheveux', price:2500, tint:'#96a87d', bg:'#eaf0e2', shape:'tall',    label:'TONER',         badge:null,          rating:4.8 },
+  { id:'shampooing-perfect', name:'Shampooing Perfect Hair', cat:'Cheveux', price:2300, tint:'#8fa475', bg:'#e8efe0', shape:'pump', label:'PERFECT HAIR',  badge:'Best-seller', rating:4.9 },
+  { id:'masque',       name:'Masque Capillaire',         cat:'Cheveux', price:2600, tint:'#b7a982', bg:'#f1ede1', shape:'jar',     label:'MASQUE',        badge:null,          rating:4.9 },
+  { id:'serum-shiny',  name:'Sérum Shiny',               cat:'Cheveux', price:2000, tint:'#bda57a', bg:'#f3ebdd', shape:'dropper', label:'SÉRUM SHINY',   badge:'Best-seller', rating:5.0 }
+];
+
+/* ============ SVG product artwork ============ */
+let artUid = 0;
+function shade(hex, amt){
+  const n = parseInt(hex.slice(1), 16);
+  let r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  const f = v => Math.round(amt >= 0 ? v + (255 - v) * amt : v * (1 + amt));
+  return `rgb(${f(r)},${f(g)},${f(b)})`;
+}
+
+function art(p){
+  const id = 'a' + (++artUid);
+  const t = p.tint;
+  const c = {
+    dark: shade(t, -.38),
+    mid: shade(t, -.14),
+    light: shade(t, .5),
+    lighter: shade(t, .74),
+    base: t
+  };
+  const label = (x, y, w, h) => {
+    const cx = x + w / 2;
+    const brandSize = Math.max(11, Math.round(w / 4.9));
+    const subSize = Math.max(4.6, Math.round(w / 15));
+    const ls = Math.round(w * .2);
+    return `<g>
+      <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${Math.min(8, w * .07)}" fill="url(#lb-${id})"/>
+      <text x="${cx}" y="${y + h * .43}" text-anchor="middle" font-family="'Cormorant Garamond',Georgia,serif" font-size="${brandSize}" letter-spacing="${Math.max(1.4, w * .022)}" fill="#2f3627">NOURÉ</text>
+      <line x1="${cx - ls / 2}" x2="${cx + ls / 2}" y1="${y + h * .52}" y2="${y + h * .52}" stroke="#2f3627" opacity=".32"/>
+      <text x="${cx}" y="${y + h * .68}" text-anchor="middle" font-family="Manrope,Arial,sans-serif" font-size="${subSize}" letter-spacing="${Math.max(1, w * .028)}" fill="#5c6254">${p.label}</text>
+    </g>`;
+  };
+
+  let shape = '';
+  if (p.shape === 'pump'){
+    shape = `
+      <rect x="132" y="146" width="136" height="262" rx="26" fill="url(#bd-${id})"/>
+      <rect x="176" y="120" width="48" height="34" rx="6" fill="url(#bd-${id})"/>
+      <rect x="171" y="106" width="58" height="16" rx="5" fill="url(#cp-${id})"/>
+      <rect x="197" y="74" width="7" height="36" rx="3.5" fill="#d8d1c1"/>
+      <rect x="188" y="52" width="24" height="28" rx="9" fill="url(#cp-${id})"/>
+      <rect x="205" y="58" width="31" height="10" rx="5" fill="url(#cp-${id})"/>
+      <rect x="142" y="174" width="9" height="200" rx="4.5" fill="#fff" opacity=".30"/>
+      ${label(148, 250, 104, 110)}`;
+  } else if (p.shape === 'dropper'){
+    shape = `
+      <rect x="138" y="170" width="124" height="236" rx="22" fill="url(#bd-${id})"/>
+      <rect x="180" y="144" width="40" height="30" rx="5" fill="url(#bd-${id})"/>
+      <rect x="172" y="116" width="56" height="32" rx="7" fill="url(#dk-${id})"/>
+      <rect x="182" y="60" width="36" height="60" rx="18" fill="url(#dk-${id})"/>
+      <rect x="189" y="70" width="8" height="32" rx="4" fill="#fff" opacity=".14"/>
+      <rect x="146" y="184" width="8" height="180" rx="4" fill="#fff" opacity=".30"/>
+      ${label(152, 252, 96, 116)}`;
+  } else if (p.shape === 'jar'){
+    shape = `
+      <rect x="126" y="232" width="148" height="126" rx="24" fill="url(#bd-${id})"/>
+      <rect x="132" y="186" width="136" height="54" rx="15" fill="url(#cp-${id})"/>
+      <rect x="144" y="196" width="38" height="7" rx="3.5" fill="#fff" opacity=".55"/>
+      <rect x="140" y="246" width="10" height="96" rx="5" fill="#fff" opacity=".26"/>
+      ${label(140, 266, 120, 66)}`;
+  } else if (p.shape === 'tall'){
+    shape = `
+      <rect x="156" y="142" width="88" height="266" rx="17" fill="url(#bd-${id})"/>
+      <rect x="184" y="118" width="32" height="28" rx="5" fill="url(#bd-${id})"/>
+      <rect x="166" y="96" width="68" height="28" rx="8" fill="url(#cp-${id})"/>
+      <rect x="166" y="162" width="7" height="190" rx="3.5" fill="#fff" opacity=".30"/>
+      ${label(166, 232, 68, 112)}`;
+  } else {
+    shape = `
+      <rect x="146" y="132" width="108" height="258" rx="18" fill="url(#bd-${id})"/>
+      <rect x="150" y="120" width="100" height="16" rx="2" fill="url(#dk-${id})" opacity=".85"/>
+      <rect x="154" y="372" width="92" height="36" rx="9" fill="url(#cp-${id})"/>
+      <rect x="156" y="160" width="8" height="192" rx="4" fill="#fff" opacity=".30"/>
+      ${label(158, 200, 84, 124)}`;
+  }
+
+  return `<svg class="art" viewBox="0 0 400 460" role="img" aria-label="${p.name}">
+    <defs>
+      <linearGradient id="bd-${id}" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="${c.dark}"/>
+        <stop offset=".13" stop-color="${c.light}"/>
+        <stop offset=".38" stop-color="${c.base}"/>
+        <stop offset=".62" stop-color="${c.mid}"/>
+        <stop offset=".83" stop-color="${c.lighter}"/>
+        <stop offset="1" stop-color="${c.dark}"/>
+      </linearGradient>
+      <linearGradient id="cp-${id}" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#cfc6b4"/>
+        <stop offset=".34" stop-color="#fdfaf3"/>
+        <stop offset=".62" stop-color="#efe8da"/>
+        <stop offset="1" stop-color="#cdc4b2"/>
+      </linearGradient>
+      <linearGradient id="dk-${id}" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#1f241a"/>
+        <stop offset=".42" stop-color="#3e4634"/>
+        <stop offset=".7" stop-color="#2f3627"/>
+        <stop offset="1" stop-color="#1b2017"/>
+      </linearGradient>
+      <linearGradient id="lb-${id}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fdfaf3"/>
+        <stop offset=".55" stop-color="#f7f2e7"/>
+        <stop offset="1" stop-color="#ece5d6"/>
+      </linearGradient>
+      <filter id="sh-${id}" x="-40%" y="-120%" width="180%" height="340%">
+        <feGaussianBlur stdDeviation="7"/>
+      </filter>
+    </defs>
+    <ellipse cx="200" cy="424" rx="94" ry="11" fill="#2f3627" opacity=".14" filter="url(#sh-${id})"/>
+    ${shape}
+  </svg>`;
+}
+
+/* ============ Render product cards ============ */
+function card(p, delay = 0){
+  const badgeCls = p.badge === 'Best-seller' ? ' product-badge--gold' : '';
+  return `<article class="product reveal" data-id="${p.id}" id="p-${p.id}" style="--pbg:${p.bg}" data-delay="${delay}">
+    <div class="product-media">
+      ${p.badge ? `<span class="product-badge${badgeCls}">${p.badge}</span>` : ''}
+      <button class="wish" aria-label="Ajouter ${p.name} aux favoris" aria-pressed="false">
+        <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9.2A4.1 4.1 0 0 1 12 8a4.1 4.1 0 0 1 7 2.8C19 15.6 12 20 12 20Z"/></svg>
+      </button>
+      ${art(p)}
+      <button class="quick-add" data-add="${p.id}">
+        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        <span>Ajouter au panier</span>
+      </button>
+    </div>
+    <div class="product-info">
+      <span class="product-cat">${p.cat}</span>
+      <h3 class="product-name">${p.name}</h3>
+      <div class="product-meta">
+        <span class="price">${money(p.price)}</span>
+        <span class="rating-mini"><span class="stars" aria-hidden="true">★★★★★</span>${p.rating.toFixed(1).replace('.', ',')}</span>
+      </div>
+    </div>
+  </article>`;
+}
+
+$('#grid-new').innerHTML  = PRODUCTS.slice(0, 3).map((p, i) => card(p, i)).join('');
+$('#grid-skin').innerHTML = PRODUCTS.slice(3, 7).map((p, i) => card(p, i % 3)).join('');
+$('#grid-hair').innerHTML = PRODUCTS.slice(7, 11).map((p, i) => card(p, i % 3)).join('');
+/* ============ Cart state ============ */
+const CART_KEY = 'noure-cart-v1';
+const FREE_SHIP = 10000;
+const findProduct = id => PRODUCTS.find(p => p.id === id);
+let cart = {};
+try { cart = JSON.parse(localStorage.getItem(CART_KEY)) || {}; } catch (e) { cart = {}; }
+
+const overlay     = $('#overlay');
+const cartDrawer  = $('#cartDrawer');
+const mobileNav   = $('#mobileNav');
+const searchPanel = $('#searchPanel');
+const cartItemsEl = $('#cartItems');
+const toastEl     = $('#toast');
+const toastText   = $('#toastText');
+const openCartBtn = $('#openCart');
+const openMenuBtn = $('#openMenu');
+
+const countItems = () => Object.values(cart).reduce((a, b) => a + b, 0);
+const cartTotal  = () => Object.entries(cart).reduce((s, [id, q]) => s + (findProduct(id)?.price || 0) * q, 0);
+const saveCart   = () => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {} };
+
+let toastTimer;
+function showToast(msg){
+  toastText.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 3400);
+}
+
+function updateBadge(){
+  const n = countItems();
+  const badge = $('#cartCount');
+  badge.textContent = n;
+  badge.classList.toggle('hide', n === 0);
+  $('#cartHeadCount').textContent = n + (n > 1 ? ' articles' : ' article');
+  openCartBtn.setAttribute('aria-label', `Ouvrir le panier (${n})`);
+}
+
+function renderCart(){
+  const ids = Object.keys(cart).filter(id => findProduct(id) && cart[id] > 0);
+
+  if (!ids.length){
+    cartItemsEl.innerHTML = `<div class="cart-empty">
+      <svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 12.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+      <p>Votre panier est vide.<br>Découvrez nos soins et composez votre rituel.</p>
+      <button class="btn btn-outline" data-close-cart>Continuer mes achats</button>
+    </div>`;
+  } else {
+    cartItemsEl.innerHTML = ids.map(id => {
+      const p = findProduct(id);
+      const q = cart[id];
+      return `<div class="cart-line" data-id="${id}">
+        <div class="cart-line-media">${art(p)}</div>
+        <div class="cart-line-body">
+          <span class="cart-line-cat">${p.cat}</span>
+          <span class="cart-line-name">${p.name}</span>
+          <span class="cart-line-price">${money(p.price)}</span>
+          <div class="cart-line-foot">
+            <div class="qty">
+              <button data-qty="-1" data-id="${id}" aria-label="Retirer une unité">−</button>
+              <span>${q}</span>
+              <button data-qty="1" data-id="${id}" aria-label="Ajouter une unité">+</button>
+            </div>
+            <button class="remove-line" data-remove="${id}">Retirer</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  const total = cartTotal();
+  const remaining = FREE_SHIP - total;
+  $('#cartTotal').textContent = money(total);
+  $('#shipBar').style.width = Math.min(100, (total / FREE_SHIP) * 100) + '%';
+  const shipSpan = $('#shipMessage').querySelector('span');
+  if (!total){
+    shipSpan.textContent = `Livraison offerte dès ${money(FREE_SHIP)} d'achat`;
+  } else if (remaining > 0){
+    shipSpan.textContent = `Plus que ${money(remaining)} pour la livraison offerte`;
+  } else {
+    shipSpan.textContent = 'Bravo, la livraison vous est offerte !';
+  }
+  updateBadge();
+}
+
+function addToCart(id){
+  const p = findProduct(id);
+  if (!p) return;
+  cart[id] = (cart[id] || 0) + 1;
+  saveCart();
+  renderCart();
+  openCartDrawer();
+  const btn = openCartBtn;
+  btn.classList.add('bump');
+  setTimeout(() => btn.classList.remove('bump'), 350);
+  showToast(`${p.name} ajouté au panier`);
+}
+
+/* ============ Drawers ============ */
+function lockScroll(on){ document.body.classList.toggle('no-scroll', on); }
+
+function closeDrawers(){
+  [cartDrawer, mobileNav].forEach(d => {
+    d.classList.remove('open');
+    d.setAttribute('aria-hidden', 'true');
+  });
+  overlay.classList.remove('show');
+  openCartBtn.setAttribute('aria-expanded', 'false');
+  openMenuBtn.setAttribute('aria-expanded', 'false');
+  lockScroll(false);
+}
+
+function openCartDrawer(){
+  closeDrawers();
+  cartDrawer.classList.add('open');
+  cartDrawer.setAttribute('aria-hidden', 'false');
+  overlay.classList.add('show');
+  openCartBtn.setAttribute('aria-expanded', 'true');
+  lockScroll(true);
+}
+
+function openMenuDrawer(){
+  closeDrawers();
+  mobileNav.classList.add('open');
+  mobileNav.setAttribute('aria-hidden', 'false');
+  overlay.classList.add('show');
+  openMenuBtn.setAttribute('aria-expanded', 'true');
+  lockScroll(true);
+}
+
+function closeSearch(){
+  searchPanel.classList.remove('open');
+  $('#searchInput').value = '';
+  lockScroll(false);
+}
+
+openCartBtn.addEventListener('click', openCartDrawer);
+openMenuBtn.addEventListener('click', openMenuDrawer);
+overlay.addEventListener('click', closeDrawers);
+$$('[data-close-cart]').forEach(b => b.addEventListener('click', closeDrawers));
+$$('[data-close-menu]').forEach(b => b.addEventListener('click', closeDrawers));
+$$('[data-close-search]').forEach(b => b.addEventListener('click', closeSearch));
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape'){
+    closeDrawers();
+    closeSearch();
+  }
+});
+
+/* ============ Cart interactions ============ */
+cartItemsEl.addEventListener('click', e => {
+  const rm = e.target.closest('[data-remove]');
+  if (rm){
+    delete cart[rm.dataset.remove];
+    saveCart(); renderCart();
+    showToast('Article retiré du panier');
+    return;
+  }
+  const qb = e.target.closest('[data-qty]');
+  if (qb){
+    const id = qb.dataset.id;
+    const delta = Number(qb.dataset.qty);
+    cart[id] = (cart[id] || 0) + delta;
+    if (cart[id] <= 0) delete cart[id];
+    saveCart(); renderCart();
+  }
+});
+
+$('#checkoutBtn').addEventListener('click', () => {
+  if (!countItems()){ showToast('Votre panier est vide'); return; }
+  showToast('Site de démonstration : aucune commande ne sera passée.');
+});
+
+/* ============ Product actions & wishlist ============ */
+document.addEventListener('click', e => {
+  const add = e.target.closest('[data-add]');
+  if (add){ addToCart(add.dataset.add); return; }
+
+  const wish = e.target.closest('.wish');
+  if (wish){
+    const on = wish.classList.toggle('active');
+    wish.setAttribute('aria-pressed', String(on));
+    showToast(on ? 'Ajouté à vos favoris' : 'Retiré de vos favoris');
+    return;
+  }
+
+  const goto = e.target.closest('[data-goto]');
+  if (goto){
+    const id = goto.dataset.goto;
+    closeSearch();
+    const el = document.getElementById('p-' + id);
+    if (el){
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.classList.remove('flash');
+      void el.offsetWidth;
+      el.classList.add('flash');
+      setTimeout(() => el.classList.remove('flash'), 1200);
+    }
+  }
+});
+
+/* ============ Hero slider ============ */
+const heroSlides = $$('.hero-slide');
+const heroImgs   = $$('.hero-img');
+const heroDots   = $$('.hero-dots button');
+let heroIndex = 0, heroTimer;
+
+function goSlide(i){
+  heroIndex = (i + heroSlides.length) % heroSlides.length;
+  heroSlides.forEach((s, k) => {
+    s.classList.toggle('active', k === heroIndex);
+    s.setAttribute('aria-hidden', String(k !== heroIndex));
+  });
+  heroImgs.forEach((im, k) => im.classList.toggle('active', k === heroIndex));
+  heroDots.forEach((d, k) => {
+    d.classList.toggle('active', k === heroIndex);
+    d.setAttribute('aria-selected', String(k === heroIndex));
+  });
+  const counter = $('.hero-count b');
+  if (counter) counter.textContent = String(heroIndex + 1).padStart(2, '0');
+}
+function startHero(){
+  clearInterval(heroTimer);
+  heroTimer = setInterval(() => goSlide(heroIndex + 1), 6500);
+}
+heroDots.forEach((d, i) => d.addEventListener('click', () => { goSlide(i); startHero(); }));
+startHero();
+
+/* ============ Header ============ */
+const header = $('#header');
+const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 12);
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+/* ============ FAQ ============ */
+$$('.faq-item').forEach(item => {
+  const btn = $('.faq-q', item);
+  btn.addEventListener('click', () => {
+    const wasOpen = item.classList.contains('open');
+    $$('.faq-item').forEach(other => {
+      other.classList.remove('open');
+      $('.faq-q', other).setAttribute('aria-expanded', 'false');
+    });
+    if (!wasOpen){
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  });
+});
+
+/* ============ Search ============ */
+const searchInput = $('#searchInput');
+const searchResults = $('#searchResults');
+
+function renderSearch(query = ''){
+  const q = query.trim().toLowerCase();
+  const list = PRODUCTS.filter(p =>
+    (p.name + ' ' + p.cat + ' ' + p.label).toLowerCase().includes(q)
+  );
+  searchResults.innerHTML = list.length
+    ? list.map(p => `<button class="search-result" data-goto="${p.id}">
+        <span class="mini-art" style="--pbg:${p.bg}">${art(p)}</span>
+        <span><strong>${p.name}</strong><small>${p.cat} · ${money(p.price)}</small></span>
+      </button>`).join('')
+    : `<p class="search-empty">Aucun produit ne correspond à votre recherche.</p>`;
+}
+
+searchInput.addEventListener('input', () => renderSearch(searchInput.value));
+searchInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter'){
+    e.preventDefault();
+    const first = $('#searchResults .search-result');
+    if (first) first.click();
+  }
+});
+
+$('#openSearch').addEventListener('click', () => {
+  closeDrawers();
+  renderSearch('');
+  searchPanel.classList.add('open');
+  lockScroll(true);
+  setTimeout(() => searchInput.focus(), 380);
+});
+
+document.addEventListener('click', e => {
+  if (!searchPanel.classList.contains('open')) return;
+  if (searchPanel.contains(e.target) || e.target.closest('#openSearch')) return;
+  closeSearch();
+});
+
+/* ============ Newsletter ============ */
+$('#newsletterForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const input = e.target.querySelector('input[type="email"]');
+  const value = input.value.trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)){
+    showToast("Merci d'entrer une adresse e-mail valide");
+    input.focus();
+    return;
+  }
+  e.target.reset();
+  showToast('Merci ! Votre code de bienvenue arrive par e-mail.');
+});
+
+/* ============ Horizontal scrollers ============ */
+function scrollByCard(container, dir, selector){
+  const item = container.querySelector(selector);
+  const gap = parseFloat(getComputedStyle(container).columnGap || '16') || 16;
+  const step = item ? item.getBoundingClientRect().width + gap : 280;
+  container.scrollBy({ left: dir * step, behavior: 'smooth' });
+}
+const gallery = $('#gallery');
+$('#galPrev').addEventListener('click', () => scrollByCard(gallery, -1, '.gallery-item'));
+$('#galNext').addEventListener('click', () => scrollByCard(gallery, 1, '.gallery-item'));
+
+const reviewTrack = $('#reviewTrack');
+const reviewBar = $('#reviewBar');
+$('#revPrev').addEventListener('click', () => scrollByCard(reviewTrack, -1, '.review-card'));
+$('#revNext').addEventListener('click', () => scrollByCard(reviewTrack, 1, '.review-card'));
+reviewTrack.addEventListener('scroll', () => {
+  const max = reviewTrack.scrollWidth - reviewTrack.clientWidth;
+  const ratio = max > 0 ? reviewTrack.scrollLeft / max : 0;
+  reviewBar.style.transform = `translateX(${ratio * 200}%)`;
+}, { passive: true });
+
+/* ============ Account (demo) ============ */
+$$('[data-open="account"]').forEach(b => b.addEventListener('click', () => {
+  showToast('Espace client — site de démonstration.');
+}));
+
+/* ============ Reveal on scroll ============ */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting){
+      entry.target.classList.add('in');
+      io.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+$$('.reveal').forEach(el => io.observe(el));
+
+/* ============ Init ============ */
+renderCart();
+renderSearch('');
+onScroll();
+</script>
+</body>
+</html>
