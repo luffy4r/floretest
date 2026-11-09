@@ -381,6 +381,41 @@ ul{margin:0;padding:0;list-style:none}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
 }
+
+/* ---------- upgrade : hero vidéo, galerie vidéo, panier ---------- */
+.hero.hero--video .hero-inner{position:relative;display:flex;align-items:flex-end;min-height:min(78vh,640px);padding:0;background:#111;color:#fff}
+.hero.hero--video .hero-media{position:absolute;inset:0;aspect-ratio:auto;border-radius:0;order:0}
+.hero.hero--video .hero-media video{width:100%;height:100%;object-fit:cover}
+.hero.hero--video .hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.62),rgba(0,0,0,.05) 65%)}
+.hero.hero--video .hero-copy{position:relative;z-index:2;padding:46px;max-width:580px}
+.hero.hero--video h1{color:#fff}
+.hero.hero--video .hero-copy p{color:rgba(255,255,255,.86)}
+.hero.hero--video .eyebrow{color:var(--sand)}
+.hero.hero--video .btn-dark{background:#f7f2e9;color:var(--forest)}
+.hero.hero--video .btn-outline{border-color:#fff;color:#fff}
+.hero.hero--video .btn-outline:hover{background:#fff;color:var(--ink)}
+.action video{width:100%;height:100%;object-fit:cover}
+.snd{position:absolute;right:10px;bottom:10px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.92);font-size:16px;display:grid;place-items:center;box-shadow:var(--shadow-sm)}
+.upsell{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.up-t{font-family:var(--font-display);font-size:20px;margin-bottom:10px}
+.up-row{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}
+.up-c{flex:0 0 134px;scroll-snap-align:start;border:1px solid var(--line);border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:3px;background:var(--cream)}
+.up-c img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px}
+.up-c b{font-size:12px;font-weight:500;line-height:1.25}
+.up-c span{font-size:12px;color:var(--muted)}
+.up-c button{margin-top:4px;height:32px;border-radius:99px;background:var(--forest);color:#f7f2e9;font-size:11px;letter-spacing:.06em}
+.minibar{position:fixed;z-index:75;left:50%;bottom:14px;width:min(440px,calc(100% - 28px));height:54px;padding:0 20px;border-radius:999px;background:var(--forest);color:#f7f2e9;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;box-shadow:var(--shadow);transform:translate(-50%,160%);transition:transform .35s var(--ease)}
+.minibar.on{transform:translate(-50%,0)}
+.minibar em{font-style:normal;color:var(--sand);font-size:12px}
+.has-bar .wa{bottom:82px}
+@media(max-width:640px){
+ .hero.hero--video .hero-copy{padding:24px 20px}
+ .hero.hero--video .hero-inner{min-height:72vh}
+ .drawer{top:auto;left:0;height:88vh;border-radius:22px 22px 0 0;transform:translateY(102%)}
+ .drawer.open{transform:none}
+ .drawer-head{position:relative;padding-top:24px}
+ .drawer-head::before{content:"";position:absolute;top:9px;left:50%;width:40px;height:4px;margin-left:-20px;border-radius:9px;background:var(--line)}
+}
 </style>
 </head>
 <body id="top">
@@ -691,6 +726,8 @@ ul{margin:0;padding:0;list-style:none}
 </div>
 
 <!-- ===================== DIVERS ===================== -->
+<button type="button" class="minibar" id="minibar" aria-label="Voir le panier"></button>
+
 <div class="toasts" id="toasts" aria-live="polite"></div>
 
 <a class="wa" id="wa-btn" href="#" target="_blank" rel="noopener" aria-label="Nous écrire sur WhatsApp">
@@ -736,6 +773,10 @@ const CONFIG = {
    Laisse "" pour afficher un joli fond "Photo produit" en attendant.
    ================================================================= */
 const IMAGES = {
+  /* 🎬 VIDÉOS : mets tes .mp4 dans images/ (ex. "images/hero.mp4"). Laisse "" pour garder l'image. */
+  heroVideo: "",
+  heroPoster: "",
+  actionVideos: ["", "", ""],   // 3 vidéos pour "Nos produits en action"
   logo: "https://cdn.shopify.com/s/files/1/0586/6143/7533/files/soo_flore_final.png?v=1687264731",                          // logo du header (ex. "images/logo.png")
   hero: "https://floredz.com/cdn/shop/files/Banner_phone_e9dd326a-e6a1-4606-9863-32a93638de5f.jpg?v=1744463417&width=3840",                          // grande image d'accueil
   action: ["https://floredz.com/cdn/shop/files/Banner_phone_e9dd326a-e6a1-4606-9863-32a93638de5f.jpg?v=1744463417&width=3840", "https://floredz.com/cdn/shop/files/Banner_phone_e9dd326a-e6a1-4606-9863-32a93638de5f.jpg?v=1744463417&width=3840", "https://floredz.com/cdn/shop/files/Banner_phone_e9dd326a-e6a1-4606-9863-32a93638de5f.jpg?v=1744463417&width=3840"]               // 3 photos de la section "En images"
@@ -966,11 +1007,12 @@ function toast(message, type) {
 /* =================================================================
    6. Ouverture / fermeture des panneaux
    ================================================================= */
-function lockBody() { document.body.classList.add("locked"); }
+function lockBody() { document.body.classList.add("locked"); syncMiniBar(); }
 function unlockBody() {
   if (!$(".modal.open") && !$(".drawer.open") && !$(".mmenu.open") && !$(".search-panel.open")) {
     document.body.classList.remove("locked");
   }
+  syncMiniBar();
 }
 function openEl(sel) { const el = $(sel); if (el) { el.classList.add("open"); el.setAttribute("aria-hidden", "false"); lockBody(); } }
 function closeEl(sel) { const el = $(sel); if (el) { el.classList.remove("open"); el.setAttribute("aria-hidden", "true"); unlockBody(); } }
@@ -1013,7 +1055,53 @@ function renderAnnounce() {
   $("#announce-track").innerHTML = msgs.concat(msgs).map(m => "<span>" + esc(m) + "</span>").join("");
 }
 
+const videoHTML = (src, poster) => '<video src="' + esc(src) + '"' + (poster ? ' poster="' + esc(poster) + '"' : "") + ' muted loop playsinline autoplay preload="metadata" disablepictureinpicture></video>';
+
+function watchVideos() {
+  const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause()), { threshold: .25 });
+  $$(".action video, #hero-media video").forEach(v => io.observe(v));
+}
+
+function flyFrom(img) {
+  const dst = $("#cart-open");
+  if (!img || !dst || window.matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+  const a = img.getBoundingClientRect(), b = dst.getBoundingClientRect();
+  const c = document.createElement("img");
+  c.src = img.currentSrc || img.src;
+  Object.assign(c.style, { position: "fixed", left: a.left + "px", top: a.top + "px", width: a.width + "px", height: a.height + "px", objectFit: "cover", borderRadius: "14px", zIndex: 300, pointerEvents: "none" });
+  document.body.appendChild(c);
+  const dx = b.left + b.width / 2 - (a.left + a.width / 2), dy = b.top + b.height / 2 - (a.top + a.height / 2);
+  c.animate([{ transform: "none", opacity: 1 }, { transform: "translate(" + dx + "px," + dy + "px) scale(.08)", opacity: .3 }], { duration: 700, easing: "cubic-bezier(.5,0,.75,0)" })
+    .onfinish = () => { c.remove(); dst.animate([{ transform: "scale(1)" }, { transform: "scale(1.25)" }, { transform: "scale(1)" }], { duration: 300 }); };
+}
+
+function syncMiniBar() {
+  const bar = $("#minibar");
+  if (!bar) return;
+  const n = cartCount();
+  const show = n > 0 && !document.body.classList.contains("locked");
+  bar.innerHTML = "<span>🛍️ " + n + " article" + (n > 1 ? "s" : "") + "</span><b>" + fmt(cartSubtotal()) + "</b><em>Voir le panier →</em>";
+  bar.classList.toggle("on", show);
+  document.body.classList.toggle("has-bar", show);
+}
+
+function upsellHTML() {
+  const inCart = new Set(state.cart.map(i => i.pid));
+  const cats = new Set(state.cart.map(i => (productById(i.pid) || {}).category));
+  const list = PRODUCTS.filter(p => !inCart.has(p.id) && stockOf(p, null) !== 0)
+    .sort((a, b) => cats.has(a.category) - cats.has(b.category)).slice(0, 4);
+  if (!list.length) return "";
+  return '<div class="upsell"><p class="up-t">Complétez votre routine</p><div class="up-row">' + list.map(p =>
+    '<div class="up-c"><img src="' + esc(p.img) + '" alt=""><b>' + esc(p.name) + "</b><span>" + fmt(p.price) +
+    '</span><button type="button" data-up="' + p.id + '">+ Ajouter</button></div>').join("") + "</div></div>";
+}
+
 function renderHero() {
+  if (IMAGES.heroVideo) {
+    $("#hero-media").innerHTML = videoHTML(IMAGES.heroVideo, IMAGES.heroPoster || IMAGES.hero);
+    $(".hero").classList.add("hero--video");
+    return;
+  }
   $("#hero-media").innerHTML = IMAGES.hero
     ? '<img src="' + esc(IMAGES.hero) + '" alt="' + esc(CONFIG.brand) + '">'
     : phHTML("Bannière d'accueil", "haut de page · format 1:1");
@@ -1058,6 +1146,8 @@ function renderGallery() {
   if (!el) return;
   el.innerHTML = [0, 1, 2].map(i => {
     const src = IMAGES.action[i];
+    const v = (IMAGES.actionVideos || [])[i];
+    if (v) return '<div class="action">' + videoHTML(v, src) + '<button type="button" class="snd" aria-label="Activer le son">🔇</button></div>';
     return '<div class="action">' + (src
       ? '<img src="' + esc(src) + '" alt="Produit Floré en situation" loading="lazy" style="width:100%;height:100%;object-fit:cover">'
       : phHTML("Photo produit", "en situation · format 3:4")) + "</div>";
@@ -1113,7 +1203,7 @@ function renderProduct() {
   const minus = $("#pdp-minus"), plus = $("#pdp-plus"), add = $("#pdp-add");
   if (minus) minus.onclick = () => { state.product.qty = Math.max(1, state.product.qty - 1); renderProduct(); };
   if (plus) plus.onclick = () => { state.product.qty = Math.min(max || 1, state.product.qty + 1); renderProduct(); };
-  if (add) add.onclick = () => { addToCart(p.id, state.product.vid, state.product.qty); closeEl("#product-modal"); };
+  if (add) add.onclick = () => { flyFrom($("#product-content .pdp-media img")); addToCart(p.id, state.product.vid, state.product.qty); closeEl("#product-modal"); };
   $$("#product-content [data-variant]").forEach(b => {
     b.onclick = () => { state.product.vid = b.dataset.variant; renderProduct(); };
   });
@@ -1197,6 +1287,7 @@ function renderCart() {
   const count = cartCount();
   badge.textContent = count;
   badge.hidden = count === 0;
+  syncMiniBar();
 
   const body = $("#drawer-body"), foot = $("#drawer-foot");
 
@@ -1241,7 +1332,7 @@ function renderCart() {
           '<svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V5h6v2M7 7l1 13h8l1-13"/></svg>' +
         "</button>" +
       "</div>"
-    ).join("");
+    ).join("") + upsellHTML();
 
   foot.innerHTML =
     '<div class="drawer-total"><span>Sous-total</span><b>' + fmt(subtotal) + "</b></div>" +
@@ -1959,6 +2050,7 @@ function bindSite() {
   if (year) year.textContent = new Date().getFullYear();
 
   $("#cart-open").addEventListener("click", openDrawer);
+  $("#minibar").addEventListener("click", openDrawer);
   $("#drawer-close").addEventListener("click", closeDrawer);
   $("#overlay").addEventListener("click", closeDrawer);
   $("#burger").addEventListener("click", openMenu);
@@ -1976,12 +2068,30 @@ function bindSite() {
   });
 
   document.addEventListener("click", e => {
+    const upb = e.target.closest("[data-up]");
+    if (upb) {
+      e.preventDefault();
+      const p = productById(upb.dataset.up);
+      flyFrom(upb.closest(".up-c").querySelector("img"));
+      if (p) addToCart(p.id, p.variants && p.variants[0] ? p.variants[0].id : "", 1);
+      return;
+    }
+
+    const snd = e.target.closest(".snd");
+    if (snd) {
+      const v = snd.parentNode.querySelector("video"), wasMuted = v.muted;
+      $$(".action video").forEach(x => { x.muted = true; x.nextElementSibling.textContent = "🔇"; });
+      v.muted = !wasMuted;
+      snd.textContent = wasMuted ? "🔊" : "🔇";
+      return;
+    }
+
     const add = e.target.closest("[data-add]");
     if (add) {
       e.preventDefault();
       if (add.disabled) return;
       const p = productById(add.dataset.add);
-      if (p) addToCart(p.id, p.variants && p.variants[0] ? p.variants[0].id : "", 1);
+      if (p) { flyFrom((add.closest(".card-media") || document).querySelector("img")); addToCart(p.id, p.variants && p.variants[0] ? p.variants[0].id : "", 1); }
       return;
     }
 
@@ -2033,6 +2143,7 @@ function init() {
   renderGallery();
   renderCart();
   bindSite();
+  watchVideos();
 }
 
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
