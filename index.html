@@ -426,6 +426,14 @@ ul{margin:0;padding:0;list-style:none}
 .hero.hero--video:not(.hero--text) .hero-copy{display:none}
 .hero.hero--video.hero--text .hero-media::after{display:block}
 .hero.hero--video.hero--text .hero-copy{position:absolute;left:0;bottom:0;z-index:2}
+/* slider du hero */
+.hs{position:relative;overflow:hidden;background:#111}
+.hs-track{display:flex;height:100%;transition:transform .55s var(--ease)}
+.hs-slide{flex:0 0 100%;height:100%}
+.hero.hero--video .hs video,.hero.hero--video .hs img{display:block;width:100%;height:100%;object-fit:cover}
+.hs-dots{position:absolute;left:0;right:0;bottom:16px;display:flex;justify-content:center;gap:12px;z-index:3}
+.hs-dots button{width:13px;height:13px;padding:0;border-radius:50%;background:rgba(255,255,255,.55);transition:.2s}
+.hs-dots button.on{background:#fff;transform:scale(1.25)}
 </style>
 </head>
 <body id="top">
@@ -784,9 +792,14 @@ const CONFIG = {
    ================================================================= */
 const IMAGES = {
   /* 🎬 VIDÉOS : mets tes .mp4 dans images/ (ex. "images/hero.mp4"). Laisse "" pour garder l'image. */
-  heroVideo: "",          // ← ICI : vidéo du hero (ordinateur), ex. "images/hero.mp4"
-  heroVideoMobile: "",    // ← vidéo du hero pour téléphone (optionnel), ex. "images/hero-mobile.mp4"
-  heroShowText: false,    // true = affiche le titre + les boutons par-dessus la vidéo
+  heroSlides: [                 // ← ICI : le slider du hero (vidéos .mp4 ou images), comme sur le site officiel
+    { src: "", mobile: "" },    // slide 1 — src = ordinateur, mobile = téléphone (optionnel)
+    { src: "", mobile: "" },    // slide 2
+    { src: "", mobile: "" }     // slide 3
+  ],
+  heroRatio: "16/7",            // forme du hero sur ordinateur
+  heroRatioMobile: "2/3",       // forme du hero sur téléphone (portrait, comme leur site)
+  heroShowText: false,          // true = affiche le titre + les boutons par-dessus
   heroPoster: "",
   actionVideos: ["", "", ""],   // 3 vidéos pour "Nos produits en action"
   logo: "https://cdn.shopify.com/s/files/1/0586/6143/7533/files/soo_flore_final.png?v=1687264731",                          // logo du header (ex. "images/logo.png")
@@ -1071,7 +1084,7 @@ const videoHTML = (src, poster) => '<video src="' + esc(src) + '"' + (poster ? '
 
 function watchVideos() {
   const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause()), { threshold: .25 });
-  $$(".action video, #hero-media video").forEach(v => io.observe(v));
+  $$(".action video").forEach(v => io.observe(v));
 }
 
 function flyFrom(img) {
@@ -1108,18 +1121,64 @@ function upsellHTML() {
     '</span><button type="button" data-up="' + p.id + '">+ Ajouter</button></div>').join("") + "</div></div>";
 }
 
+let heroCtl = null;
+const isVid = u => /\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(u);
+
+function initHeroSlider(list, mobile) {
+  const host = $("#hero-media");
+  const poster = IMAGES.heroPoster || "";
+  const ar = (mobile ? IMAGES.heroRatioMobile : IMAGES.heroRatio) || (mobile ? "2/3" : "16/7");
+  const multi = list.length > 1;
+  host.innerHTML = '<div class="hs" style="aspect-ratio:' + esc(ar) + '"><div class="hs-track">' +
+    list.map(u => '<div class="hs-slide">' + (isVid(u)
+      ? '<video src="' + esc(u) + '"' + (poster ? ' poster="' + esc(poster) + '"' : "") + ' muted playsinline preload="metadata"' + (multi ? "" : " loop") + "></video>"
+      : '<img src="' + esc(u) + '" alt="' + esc(CONFIG.brand) + '">') + "</div>").join("") + "</div>" +
+    (multi ? '<div class="hs-dots">' + list.map((u, i) => '<button type="button" aria-label="Slide ' + (i + 1) + '" data-hs="' + i + '"></button>').join("") + "</div>" : "") + "</div>";
+  const root = host.firstChild, track = $(".hs-track", root), slides = $$(".hs-slide", root), dots = $$("[data-hs]", root);
+  let cur = 0, timer = null, visible = false;
+  const stop = () => { clearTimeout(timer); slides.forEach(sl => { const v = sl.querySelector("video"); if (v) v.pause(); }); };
+  const next = () => show((cur + 1) % list.length);
+  function play() {
+    stop();
+    if (!visible) return;
+    const v = slides[cur].querySelector("video");
+    if (v) {
+      v.currentTime = 0;
+      v.onended = multi ? next : null;
+      v.play().catch(() => { if (multi) timer = setTimeout(next, 6000); });
+    } else if (multi) timer = setTimeout(next, 5000);
+  }
+  function show(i) {
+    cur = i;
+    track.style.transform = "translateX(-" + i * 100 + "%)";
+    dots.forEach((d, k) => d.classList.toggle("on", k === i));
+    play();
+  }
+  root.addEventListener("click", e => { const b = e.target.closest("[data-hs]"); if (b) show(+b.dataset.hs); });
+  let x0 = null;
+  root.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; }, { passive: true });
+  root.addEventListener("touchend", e => {
+    if (x0 == null || !multi) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    x0 = null;
+    if (Math.abs(dx) > 40) show((cur + (dx < 0 ? 1 : -1) + list.length) % list.length);
+  });
+  const io = new IntersectionObserver(es => { visible = es[0].isIntersecting; visible ? play() : stop(); }, { threshold: .3 });
+  io.observe(root);
+  show(0);
+  return { destroy() { stop(); io.disconnect(); } };
+}
+
 function renderHero() {
-  if (IMAGES.heroVideo) {
+  const slidesFor = m => (IMAGES.heroSlides || []).map(x => (m && x.mobile) || x.src || x.mobile).filter(Boolean);
+  if (slidesFor(false).length || slidesFor(true).length) {
     const mq = window.matchMedia("(max-width:760px)");
-    const pick = () => (mq.matches && IMAGES.heroVideoMobile) || IMAGES.heroVideo;
-    $("#hero-media").innerHTML = videoHTML(pick(), IMAGES.heroPoster || IMAGES.hero);
     const sec = $(".hero");
     sec.classList.add("hero--video");
     sec.classList.toggle("hero--text", !!IMAGES.heroShowText);
-    mq.addEventListener("change", () => {
-      const v = $("#hero-media video");
-      if (v && v.getAttribute("src") !== pick()) { v.src = pick(); v.play().catch(() => {}); }
-    });
+    const mount = () => { if (heroCtl) heroCtl.destroy(); heroCtl = initHeroSlider(slidesFor(mq.matches), mq.matches); };
+    mount();
+    mq.addEventListener("change", mount);
     return;
   }
   $("#hero-media").innerHTML = IMAGES.hero
