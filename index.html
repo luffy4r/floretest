@@ -416,18 +416,18 @@ ul{margin:0;padding:0;list-style:none}
  .drawer-head{position:relative;padding-top:24px}
  .drawer-head::before{content:"";position:absolute;top:9px;left:50%;width:40px;height:4px;margin-left:-20px;border-radius:9px;background:var(--line)}
 }
-/* hero vidéo : bannière pleine largeur en format vertical 7/16 */
+/* hero vidéo : largeur 100%, longueur réduite */
 .hero.hero--video{padding:0}
 .hero.hero--video .container{max-width:none;padding:0}
 .hero.hero--video .hero-inner{display:block;min-height:0;border-radius:0;padding:0;background:#111}
-.hero.hero--video .hero-media{position:relative;inset:auto; width:100%; aspect-ratio:7/16; border-radius:0; order:0}
+.hero.hero--video .hero-media{position:relative;inset:auto;width:100%;aspect-ratio:3/4;max-height:68vh;border-radius:0;order:0}
 .hero.hero--video .hero-media::after{display:none}
 .hero.hero--video:not(.hero--text) .hero-copy{display:none}
 .hero.hero--video.hero--text .hero-media::after{display:block}
 .hero.hero--video.hero--text .hero-copy{position:absolute;left:0;bottom:0;z-index:2}
 
 /* slider du hero */
-.hs{position:relative;width:100%;aspect-ratio:7/16;overflow:hidden;background:#111}
+.hs{position:relative;width:100%;aspect-ratio:3/4;max-height:68vh;overflow:hidden;background:#111}
 .hs-track{display:flex;width:100%;height:100%;transition:transform .55s var(--ease)}
 .hs-slide{flex:0 0 100%;width:100%;height:100%;position:relative}
 .hero.hero--video .hs video,.hero.hero--video .hs img{
@@ -436,7 +436,7 @@ ul{margin:0;padding:0;list-style:none}
   height:100% !important;
   object-fit:cover;
 }
-.hs-dots{position:absolute;left:0;right:0;bottom:18px;display:flex;justify-content:center;gap:10px;z-index:3}
+.hs-dots{position:absolute;left:0;right:0;bottom:16px;display:flex;justify-content:center;gap:10px;z-index:3}
 .hs-dots button{width:9px;height:9px;padding:0;border-radius:50%;background:rgba(255,255,255,.45);transition:.2s}
 .hs-dots button.on{background:#fff;transform:scale(1.2)} 
 </style>
@@ -802,8 +802,8 @@ const IMAGES = {
     { src: "https://floredz.com/cdn/shop/files/Banner_phone_e9dd326a-e6a1-4606-9863-32a93638de5f.jpg?v=1744463417&width=3840", mobile: "" }, // Remplace par "images/video2.mp4"
     { src: "https://floredz.com/cdn/shop/files/Banner_phone_e9dd326a-e6a1-4606-9863-32a93638de5f.jpg?v=1744463417&width=3840", mobile: "" }  // Remplace par "images/video3.mp4"
   ],
-  heroRatio: "7/16",            // format sur ordinateur (tu peux mettre "9/16" ou "7/16")
-  heroRatioMobile: "7/16",      // format vertical 7/16 sur téléphone
+  heroRatio: "3/4",            // longueur réduite
+  heroRatioMobile: "3/4",      // longueur réduite sur téléphone (mets "4/5" si tu veux encore plus court) 
   heroShowText: false,          // false = plein écran sans texte par-dessus comme sur floredz.com
   heroPoster: "",
   actionVideos: ["", "", ""],
