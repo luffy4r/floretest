@@ -416,6 +416,16 @@ ul{margin:0;padding:0;list-style:none}
  .drawer-head{position:relative;padding-top:24px}
  .drawer-head::before{content:"";position:absolute;top:9px;left:50%;width:40px;height:4px;margin-left:-20px;border-radius:9px;background:var(--line)}
 }
+/* hero vidéo : bannière pleine largeur, ratio naturel de la vidéo */
+.hero.hero--video{padding:0}
+.hero.hero--video .container{max-width:none;padding:0}
+.hero.hero--video .hero-inner{display:block;min-height:0;border-radius:0}
+.hero.hero--video .hero-media{position:relative;inset:auto;aspect-ratio:auto;order:0}
+.hero.hero--video .hero-media video{display:block;width:100%;height:auto}
+.hero.hero--video .hero-media::after{display:none}
+.hero.hero--video:not(.hero--text) .hero-copy{display:none}
+.hero.hero--video.hero--text .hero-media::after{display:block}
+.hero.hero--video.hero--text .hero-copy{position:absolute;left:0;bottom:0;z-index:2}
 </style>
 </head>
 <body id="top">
@@ -774,7 +784,9 @@ const CONFIG = {
    ================================================================= */
 const IMAGES = {
   /* 🎬 VIDÉOS : mets tes .mp4 dans images/ (ex. "images/hero.mp4"). Laisse "" pour garder l'image. */
-  heroVideo: "",
+  heroVideo: "",          // ← ICI : vidéo du hero (ordinateur), ex. "images/hero.mp4"
+  heroVideoMobile: "",    // ← vidéo du hero pour téléphone (optionnel), ex. "images/hero-mobile.mp4"
+  heroShowText: false,    // true = affiche le titre + les boutons par-dessus la vidéo
   heroPoster: "",
   actionVideos: ["", "", ""],   // 3 vidéos pour "Nos produits en action"
   logo: "https://cdn.shopify.com/s/files/1/0586/6143/7533/files/soo_flore_final.png?v=1687264731",                          // logo du header (ex. "images/logo.png")
@@ -1098,8 +1110,16 @@ function upsellHTML() {
 
 function renderHero() {
   if (IMAGES.heroVideo) {
-    $("#hero-media").innerHTML = videoHTML(IMAGES.heroVideo, IMAGES.heroPoster || IMAGES.hero);
-    $(".hero").classList.add("hero--video");
+    const mq = window.matchMedia("(max-width:760px)");
+    const pick = () => (mq.matches && IMAGES.heroVideoMobile) || IMAGES.heroVideo;
+    $("#hero-media").innerHTML = videoHTML(pick(), IMAGES.heroPoster || IMAGES.hero);
+    const sec = $(".hero");
+    sec.classList.add("hero--video");
+    sec.classList.toggle("hero--text", !!IMAGES.heroShowText);
+    mq.addEventListener("change", () => {
+      const v = $("#hero-media video");
+      if (v && v.getAttribute("src") !== pick()) { v.src = pick(); v.play().catch(() => {}); }
+    });
     return;
   }
   $("#hero-media").innerHTML = IMAGES.hero
